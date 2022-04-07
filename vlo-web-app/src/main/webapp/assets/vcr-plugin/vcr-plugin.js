@@ -21,8 +21,26 @@ class VCRIntegration {
         this.config = config;
     }
     
+    getQueue() {
+        const queue = window.localStorage.getItem('vcrQueue');
+        if(queue) {
+            console.log('queue:' + queue );
+            return JSON.parse(queue);
+        } else {
+            return this.saveQueue([]);
+        }
+    }
+    
+    saveQueue(queue) {
+        window.localStorage.setItem('vcrQueue', JSON.stringify(queue));
+        return queue;
+    }
+    
     addToQueue(url) {
-        alert('Add to queue: ' + url);
+        const queue = this.getQueue();
+        queue.push({'url': url});
+        this.saveQueue(queue);
+        console.log('Queue: ' + this.getQueue());
     }
 }
 
@@ -42,6 +60,9 @@ const init_plugin = function() {
         
         vcrIntegration = new VCRIntegration({});
         const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
+        
+        // TODO: render 'add to queue' buttons where placeholders are defined
+        
         // bind event to add to queue
         $("body").on("click", "a[data-vcr-url]", eventHandler.handleAddToQueueEvent);
     }
