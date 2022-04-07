@@ -16,9 +16,14 @@
  */
 
 const queueViewTemplate = `
-<div id='vcrQueue'>
-    <ul></ul>
-    <a id='clearVcrQueue'>Clear</a>
+<div id="vcrQueue" style="position: fixed; top: 0px; right: 0px; 
+                            min-width: 30em; max-width: 50em; 
+                            z-index: 1000; padding: 0 .5em .5em .5em;
+                            background: #fff; border: 1px solid #000;">
+    <h2>Items to submit to the VCR</h2>
+    <ul style="0 0 0 1em"></ul>
+    <button id="submitVcrQueue">Submit</button>
+    <button id="clearVcrQueue">Clear</button>
 </div>
 `;
 
@@ -91,7 +96,7 @@ const init_plugin = function() {
     vcrIntegration = new VCRIntegration({});
     const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
     
-    $("body").on("click", "#vcrQueue a#clearVcrQueue", eventHandler.handleClearQueueEvent)
+    $("body").on("click", "#vcrQueue #clearVcrQueue", eventHandler.handleClearQueueEvent)
     
     // if auto registration of handlers enabled
     if($("a[data-vcr-url]").length) {
