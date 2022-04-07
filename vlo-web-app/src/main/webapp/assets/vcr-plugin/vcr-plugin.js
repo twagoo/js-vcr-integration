@@ -27,15 +27,11 @@ class VCRIntegration {
 }
 
 class VCRIntegrationEventHandler {
-    
-    constructor(vcrIntegration) {
-        this.vcrIntegration = vcrIntegration;
-    }
 
     handleAddToQueueEvent(event) {
         const url = $(event.target).attr('data-vcr-url');
         if(url) {
-            this.vcrIntegration.addToQueue(url);
+            vcrIntegration.addToQueue(url);
         }
     }
 }
@@ -44,11 +40,14 @@ const init_plugin = function() {
     if($("a[data-vcr-url]").length) {
         console.log("Found one or more VCR queue item controls: " + $("a[data-vcr-url]").length);
         
-        const vcrIntegration = new VCRIntegration({});
+        vcrIntegration = new VCRIntegration({});
         const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
         // bind event to add to queue
-        $("body").on("click", "a[data-vcr-url]", eventHandler.handleAddToQueueEvent.bind(eventHandler));
+        $("body").on("click", "a[data-vcr-url]", eventHandler.handleAddToQueueEvent);
     }
 };
 
+// global VCRIntegration object
+let vcrIntegration = null;
+// init when document ready
 $(document).ready(init_plugin);
