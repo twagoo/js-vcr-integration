@@ -14,4 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-alert('vcr plugin enabled');
+
+class VCRIntegration {
+    
+    constructor(config) {
+        this.config = config;
+    }
+    
+    addToQueue(url) {
+        alert('Add to queue: ' + url);
+    }
+}
+
+class VCRIntegrationEventHandler {
+    
+    constructor(vcrIntegration) {
+        this.vcrIntegration = vcrIntegration;
+    }
+
+    handleAddToQueueEvent(event) {
+        const url = $(event.target).attr('data-vcr-url');
+        if(url) {
+            this.vcrIntegration.addToQueue(url);
+        }
+    }
+}
+
+const init_plugin = function() {
+    if($("a[data-vcr-url]").length) {
+        console.log("Found one or more VCR queue item controls: " + $("a[data-vcr-url]").length);
+        
+        const vcrIntegration = new VCRIntegration({});
+        const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
+        // bind event to add to queue
+        $("body").on("click", "a[data-vcr-url]", eventHandler.handleAddToQueueEvent.bind(eventHandler));
+    }
+};
+
+$(document).ready(init_plugin);
