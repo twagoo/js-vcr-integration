@@ -15,6 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+const queueViewTemplate = `
+<div id='vcrQueue'>
+    <ul></ul>
+    <a id='clearVcrQueue'>Clear</a>
+</div>
+`;
+
 class VCRIntegration {
     
     constructor(config) {
@@ -24,47 +31,81 @@ class VCRIntegration {
     getQueue() {
         const queue = window.localStorage.getItem('vcrQueue');
         if(queue) {
-            console.log('queue:' + queue );
-            return JSON.parse(queue);
+            return JSON.parse(queue);//['content'];
         } else {
             return this.saveQueue([]);
         }
     }
     
     saveQueue(queue) {
-        window.localStorage.setItem('vcrQueue', JSON.stringify(queue));
+        window.localStorage.setItem('vcrQueue', JSON.stringify(queue))  ;//{'content': queue}));
         return queue;
+    }
+    
+    clearQueue() {
+        window.localStorage.removeItem('vcrQueue');
     }
     
     addToQueue(url) {
         const queue = this.getQueue();
         queue.push({'url': url});
         this.saveQueue(queue);
-        console.log('Queue: ' + this.getQueue());
+        console.log('Queue: ');
+        console.dir(this.getQueue())
+        this.renderQueue();
+    }
+    
+    renderQueue() {
+        if($("body #vcrQueue").length) {
+            $("body #vcrQueue").remove();
+        }
+        const queue = this.getQueue();
+        if(queue && queue.length > 0) {
+            $("body").append(queueViewTemplate);
+            const list = $("#vcrQueue ul");        
+            queue.forEach(function(qi){
+                list.append('<li>'+qi['url']+'</li>');
+            });
+        }
     }
 }
 
 class VCRIntegrationEventHandler {
+    
+    handleClearQueueEvent() {
+        console.log('clear queue');
+        vcrIntegration.clearQueue();
+        vcrIntegration.renderQueue();
+    }
 
     handleAddToQueueEvent(event) {
         const url = $(event.target).attr('data-vcr-url');
         if(url) {
             vcrIntegration.addToQueue(url);
+            // TODO: disable buttons of items that are already in queue
         }
     }
 }
 
 const init_plugin = function() {
+    vcrIntegration = new VCRIntegration({});
+    const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
+    
+    $("body").on("click", "#vcrQueue a#clearVcrQueue", eventHandler.handleClearQueueEvent)
+    
+    // if auto registration of handlers enabled
     if($("a[data-vcr-url]").length) {
         console.log("Found one or more VCR queue item controls: " + $("a[data-vcr-url]").length);
-        
-        vcrIntegration = new VCRIntegration({});
-        const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
         
         // TODO: render 'add to queue' buttons where placeholders are defined
         
         // bind event to add to queue
         $("body").on("click", "a[data-vcr-url]", eventHandler.handleAddToQueueEvent);
+    }
+    
+    const queue = vcrIntegration.getQueue();
+    if(queue) {
+        vcrIntegration.renderQueue();
     }
 };
 
