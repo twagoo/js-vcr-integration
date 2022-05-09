@@ -15,17 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const queueViewTemplate = `
-<div id="vcrQueue" style="position: fixed; top: 0px; right: 0px; 
-                            min-width: 30em; max-width: 50em; 
-                            z-index: 1000; padding: 0 .5em .5em .5em;
-                            background: #fff; border: 1px solid #000;">
-    <h2>Items to submit to the VCR</h2>
-    <ul style="0 0 0 1em"></ul>
-    <button id="submitVcrQueue">Submit</button>
-    <button id="clearVcrQueue">Clear</button>
-</div>
-`;
+const queueViewTemplate = function(config, collectionMetadata) {
+
+    if (!config) config = {};
+    if (!collectionMetadata) collectionMetadata = {};
+
+    let submitEndpoint = config.endpointUrl || 'https://beta-collections.clarin.eu/submit/extensional';
+    let name = collectionMetadata.name || config.defaultName || 'No name';
+
+    return `
+    <div id="vcrQueue" style="position: fixed; top: 5px; right: 5px;
+                                min-width: 30em; max-width: 50em;
+                                z-index: 1000; padding: .5em 1em .5em .5em;
+                                background: #fff; border: 1px solid #000;">
+        <h2>Items to submit to the VCR</h2>
+        <form method="post" action="${submitEndpoint}">
+            <input type="hidden" name="name" value="${name}" />
+            <ul style="0 0 0 1em"></ul>
+            <input id="submitVcrQueue" type="submit" value="Submit" />
+            <button id="clearVcrQueue">Clear</button>
+        </form>
+    </div>
+    `;
+}
 
 class VCRIntegration {
 
@@ -96,10 +108,18 @@ class VCRIntegration {
         }
         const queue = this.getQueue();
         if (queue && queue.length > 0) {
-            $("body").append(queueViewTemplate);
+            $("body").append(queueViewTemplate(this.config));
             const list = $("#vcrQueue ul");
             queue.forEach(function (qi) {
-                list.append('<li data-vcr-url="' + qi['url'] + '">' + qi['title'] + ' <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a></li>');
+                let resourceUriValue = JSON.stringify({
+                    "uri": qi['url'],
+                    "label": qi['title']
+                }).replaceAll('"', '&quot;');
+                list.append('<li data-vcr-url="' + qi['url'] + '">'
+                + qi['title']
+                + ' <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a>'
+                + ' <input type="hidden" name="resourceUri" value="' + resourceUriValue + '" />'
+                + '</li>');
             });
         }
     }
@@ -132,6 +152,7 @@ class VCRIntegrationEventHandler {
 }
 
 const init_plugin = function () {
+    //TODO: read configuration
     vcrIntegration = new VCRIntegration({});
     const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
 
@@ -153,6 +174,7 @@ const init_plugin = function () {
         vcrIntegration.renderQueue();
     }
 };
+
 
 // global VCRIntegration object
 let vcrIntegration = null;
