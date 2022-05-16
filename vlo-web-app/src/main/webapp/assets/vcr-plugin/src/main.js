@@ -18,6 +18,8 @@
 import { VCRIntegration } from './VCRIntegration.js';
 import { VCRIntegrationEventHandler } from './VCRIntegrationEventHandler.js';
 
+import $ from 'jquery';
+
 const init_plugin = function () {
     //TODO: read configuration
     vcrIntegration = new VCRIntegration({});

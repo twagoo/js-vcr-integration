@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import $ from 'jquery';
+
 export class VCRIntegrationEventHandler {
         
     constructor(vcrIntegration) {
