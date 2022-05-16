@@ -44,8 +44,5 @@ const init_plugin = function () {
     }
 };
 
-
-// global VCRIntegration object
-let vcrIntegration = null;
 // init when document ready
 $(document).ready(init_plugin);

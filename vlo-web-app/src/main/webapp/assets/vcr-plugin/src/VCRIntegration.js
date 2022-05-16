@@ -41,6 +41,19 @@ const queueViewTemplate = function(config, collectionMetadata) {
     `;
 };
 
+const queueItemTemplate = function(qItem) {
+    let resourceUriValue = JSON.stringify({
+        "uri": qItem['url'],
+        "label": qItem['title']
+    }).replaceAll('"', '&quot;');
+    
+    return '<li data-vcr-url="' + qItem['url'] + '">'
+                + qItem['title']
+                + ' <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a>'
+                + ' <input type="hidden" name="resourceUri" value="' + resourceUriValue + '" />'
+                + '</li>';
+};
+
 export class VCRIntegration {
 
     constructor(config) {
@@ -112,17 +125,7 @@ export class VCRIntegration {
         if (queue && queue.length > 0) {
             $("body").append(queueViewTemplate(this.config));
             const list = $("#vcrQueue ul");
-            queue.forEach(function (qi) {
-                let resourceUriValue = JSON.stringify({
-                    "uri": qi['url'],
-                    "label": qi['title']
-                }).replaceAll('"', '&quot;');
-                list.append('<li data-vcr-url="' + qi['url'] + '">'
-                + qi['title']
-                + ' <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a>'
-                + ' <input type="hidden" name="resourceUri" value="' + resourceUriValue + '" />'
-                + '</li>');
-            });
+            queue.forEach(qItem => list.append(queueItemTemplate(qItem)));
         }
     }
 };
