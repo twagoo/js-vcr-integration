@@ -58,7 +58,9 @@ const queueItemTemplate = function(qItem) {
 export class VCRIntegration {
 
     constructor(config) {
+        logger.debug('VCRIntegration constructed with configuration', config);
         this.config = config;
+        this._applyConfig();
     }
 
     getQueue() {
@@ -136,5 +138,31 @@ export class VCRIntegration {
     
     setLogLevel(level) {
         logger.setLevel(level);
+    }
+    
+    setConfiguration(config, extend = true) {
+        if (extend) {
+            logger.debug('Extending configuration with new values', config);
+            $.extend(this.config, config);
+        } else {
+            logger.debug('Replacing existing configuration with new values', config);
+            this.config = config;
+        }
+        logger.debug('Applying updated configuration', config);
+        this._applyConfig();
+    }
+    
+    _applyConfig() {
+        const cfg = this.config;
+        
+        if(!cfg) {
+            logger.warn('Configuration object not set, cannot apply configuration!');
+        }
+        
+        if (cfg.hasOwnProperty('logLevel')) {
+            const logLevel = cfg['logLevel'];
+            logger.info('Setting log level to ', logLevel);
+            this.setLogLevel(logLevel);
+        }
     }
 };
