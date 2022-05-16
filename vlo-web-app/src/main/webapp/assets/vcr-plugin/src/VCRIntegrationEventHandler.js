@@ -16,34 +16,45 @@
  */
 
 import $ from 'jquery';
+import logger from 'loglevel';
 
 export class VCRIntegrationEventHandler {
-        
+
     constructor(vcrIntegration) {
         this.vcrIntegration = vcrIntegration;
         self = this;
     }
 
     handleClearQueueEvent() {
-        console.log('clear queue');
+        logger.debug('Handling clear queue event');
         this.vcrIntegration.clearQueue();
+        logger.debug('Re-rendering for cleared queue');
         this.vcrIntegration.renderQueue();
     }
 
     handleRemoveFromQueueEvent(event) {
-        console.log('remove from queue');
+        logger.debug('Handling remove from queue event');
         const url = $(event.target).parent().attr('data-vcr-url');
-        if (this.vcrIntegration.removeFromQueue(url)) {
-            this.vcrIntegration.renderQueue();
+        if(url) {
+            if (this.vcrIntegration.removeFromQueue(url)) {
+                this.vcrIntegration.renderQueue();
+            } else {
+                logger.warn('Failed to remove from queue: ', url);
+            }
+        } else {
+            logger.warn('Cannot remove from queue, no URL on context: ', $(event.target));
         }
     }
 
     handleAddToQueueEvent(event) {
+        logger.debug('Handling add to queue event');
         const url = $(event.target).attr('data-vcr-url');
         const title = $(event.target).attr('data-vcr-title');
         if (url) {
             this.vcrIntegration.addToQueue(url, title);
             // TODO: disable buttons of items that are already in queue
+        } else {
+            logger.warn('Cannot add to queue, no URL on context: ', $(event.target));
         }
     }
 };

@@ -19,10 +19,11 @@ import { VCRIntegration } from './VCRIntegration.js';
 import { VCRIntegrationEventHandler } from './VCRIntegrationEventHandler.js';
 
 import $ from 'jquery';
+import logger from 'loglevel';
 
 const init_plugin = function () {
     //TODO: read configuration
-    vcrIntegration = new VCRIntegration({});
+    let vcrIntegration = new VCRIntegration({});
     const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
 
     $("body").on("click", "#vcrQueue #clearVcrQueue", $.proxy(eventHandler.handleClearQueueEvent, eventHandler));
@@ -30,7 +31,7 @@ const init_plugin = function () {
 
     // if auto registration of handlers enabled
     if ($("a[data-vcr-url]").length) {
-        console.log("Found one or more VCR queue item controls: " + $("a[data-vcr-url]").length);
+        logger.debug("Found one or more VCR queue item controls: " + $("a[data-vcr-url]").length);
 
         // TODO: render 'add to queue' buttons where placeholders are defined
 
@@ -42,7 +43,10 @@ const init_plugin = function () {
     if (queue) {
         vcrIntegration.renderQueue();
     }
+    
+    window.vcrIntegration = vcrIntegration;
 };
 
+logger.setLevel(logger.levels.INFO);
 // init when document ready
 $(document).ready(init_plugin);

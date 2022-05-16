@@ -16,6 +16,7 @@
  */
 
 import $ from 'jquery';
+import logger from 'loglevel';
 
 const queueViewTemplate = function(config, collectionMetadata) {
 
@@ -70,12 +71,15 @@ export class VCRIntegration {
     }
 
     saveQueue(queue) {
+        logger.debug('Saving queue: ', queue);
         window.localStorage.setItem('vcrQueue', JSON.stringify(queue));//{'content': queue}));
         return queue;
     }
 
     clearQueue() {
+        logger.debug('Clearing queue: ', this.getQueue());
         window.localStorage.removeItem('vcrQueue');
+        logger.info('Queue cleared');
     }
 
     getItemIndex(url) {
@@ -89,15 +93,16 @@ export class VCRIntegration {
     }
 
     removeFromQueue(url) {
-        console.log('Remove from queue: ' + url);
+        logger.debug('Remove from queue: ', url);
         const index = this.getItemIndex(url);
         if (index >= 0) {
-            console.log('Remove item ' + index);
+            logger.debug('Remove item ', index);
 
             const queue = this.getQueue();
             queue.splice(index, 1);
 
             this.saveQueue(queue);
+            logger.info('Removed from queue');
             return true;
         } else {
             return false;
@@ -106,13 +111,13 @@ export class VCRIntegration {
 
     addToQueue(url, title) {
         if(this.getItemIndex(url) >= 0) {
-            console.log('URL already in queue');
+            logger.info('URL already in queue, not adding again');
         } else {
             const queue = this.getQueue();
             queue.push({'url': url, 'title': title});
             this.saveQueue(queue);
-            console.log('Queue: ');
-            console.dir(this.getQueue());
+            logger.info('Added to queue');
+            logger.debug('New queue: ', this.getQueue());
             this.renderQueue();
         }
     }
@@ -127,5 +132,9 @@ export class VCRIntegration {
             const list = $("#vcrQueue ul");
             queue.forEach(qItem => list.append(queueItemTemplate(qItem)));
         }
+    }
+    
+    setLogLevel(level) {
+        logger.setLevel(level);
     }
 };
