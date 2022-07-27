@@ -17,42 +17,26 @@
 
 import $ from 'jquery';
 import logger from 'loglevel';
+import Handlebars from 'handlebars/lib/handlebars';
+import queueComponentTemplate from "./templates/queueComponent.handlebars";
 
-const queueViewTemplate = function(config, collectionMetadata) {
+const renderQueueView = function(config, queue, collectionMetadata) {
 
     if (!config) config = {};
     if (!collectionMetadata) collectionMetadata = {};
-
-    let submitEndpoint = config.endpointUrl || 'https://beta-collections.clarin.eu/submit/extensional';
-    let name = collectionMetadata.name || config.defaultName || 'No name';
-
-    return `
-    <div id="vcrQueue" style="position: fixed; top: 5px; right: 5px;
-                                min-width: 30em; max-width: 50em;
-                                z-index: 1000; padding: .5em 1em .5em .5em;
-                                background: #fff; border: 1px solid #000;">
-        <h2>Items to submit to the VCR</h2>
-        <form method="post" action="${submitEndpoint}">
-            <input type="hidden" name="name" value="${name}" />
-            <ul style="0 0 0 1em"></ul>
-            <input id="submitVcrQueue" type="submit" value="Submit" />
-            <button id="clearVcrQueue">Clear</button>
-        </form>
-    </div>
-    `;
-};
-
-const queueItemTemplate = function(qItem) {
-    let resourceUriValue = JSON.stringify({
-        "uri": qItem['url'],
-        "label": qItem['title']
-    }).replaceAll('"', '&quot;');
     
-    return '<li data-vcr-url="' + qItem['url'] + '">'
-                + qItem['title']
-                + ' <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a>'
-                + ' <input type="hidden" name="resourceUri" value="' + resourceUriValue + '" />'
-                + '</li>';
+    for(var i in queue) {
+        queue[i]['resourceUriValue'] = JSON.stringify({
+            "uri": queue[i]['url'],
+            "label": queue[i]['title']
+        }).replaceAll('"', '&quot;');
+    }
+
+    return queueComponentTemplate({
+        submitEndpoint: config.endpointUrl || 'https://beta-collections.clarin.eu/submit/extensional',
+        name : collectionMetadata.name || config.defaultName || 'No name',
+        items: queue
+    });
 };
 
 export class VCRIntegration {
@@ -130,9 +114,7 @@ export class VCRIntegration {
         }
         const queue = this.getQueue();
         if (queue && queue.length > 0) {
-            $("body").append(queueViewTemplate(this.config));
-            const list = $("#vcrQueue ul");
-            queue.forEach(qItem => list.append(queueItemTemplate(qItem)));
+            $("body").append(renderQueueView(this.config, queue));
         }
     }
     
