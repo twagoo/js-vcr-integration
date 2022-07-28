@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+    mode: 'production',
     entry: {
         app: './src/main.js'
     },
@@ -8,7 +9,9 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'vcr-integration.js'
     },
-    mode: 'production',
+    optimization: {
+        usedExports: true
+    },
     module: {
         rules: [
             {

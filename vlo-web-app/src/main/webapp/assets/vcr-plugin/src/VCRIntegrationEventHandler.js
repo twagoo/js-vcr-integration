@@ -57,4 +57,9 @@ export class VCRIntegrationEventHandler {
             logger.warn('Cannot add to queue, no URL on context: ', $(event.target));
         }
     }
+    
+    handleVcrQueueMinimizedToggle(event) {
+        logger.debug('Toggling queue component minimized state');
+        $("#queue-component").toggleClass('minimized');
+    }
 };

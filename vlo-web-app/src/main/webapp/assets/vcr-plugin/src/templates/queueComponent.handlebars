@@ -4,25 +4,35 @@
 
 <div class="vcr-plugin">
     <div id="queue-component">
-        <h2>Items to submit to the VCR</h2>
-        <form method="post" action="{{submitEndpoint}}">
-            <input type="hidden" name="name" value="{{name}}" />
-            <ul id="queue-items"">
-            {{#each items}}
-                    <li data-vcr-url="{{url}}">
-                    {{title}}
-                    <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a>
-                    {{! Input value is produced with custom helper defined in src/templates/helpers }}
-                    <input 
-                        type="hidden" 
-                        name="resourceUri" 
-                        value="{{resource_uri this}}" 
-                    />
-                    </li>
-            {{/each}}
-            </ul>
-            <input id="submitVcrQueue" type="submit" value="Submit" />
-            <button id="clearVcrQueue">Clear</button>
-        </form>
+        <div class="content">
+            <div class="component-control">
+                <a class="component-control-hide-toggle" href="#">{{{icons.hide}}} Hide</a>
+            </div>
+            <h2>Items to submit to the VCR</h2>
+            <form method="post" action="{{submitEndpoint}}">
+                <input type="hidden" name="name" value="{{name}}" />
+                <ul id="queue-items"">
+                {{#each items}}
+                        <li data-vcr-url="{{url}}">
+                        {{title}}
+                        <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a>
+                        {{! Input value is produced with custom helper defined in src/templates/helpers }}
+                        <input 
+                            type="hidden" 
+                            name="resourceUri" 
+                            value="{{resource_uri this}}" 
+                        />
+                        </li>
+                {{/each}}
+                </ul>
+                <input id="submitVcrQueue" type="submit" value="Submit" />
+                <button id="clearVcrQueue">Clear</button>
+            </form>
+        </div>
+        <div class="minimized-content">
+            <div class="component-control">
+                <a class="component-control-hide-toggle" href="#">{{{icons.show}}} Show VCR queue</a>
+            </div>
+        </div>
     </div>
-    </div>
+</div>

@@ -26,8 +26,9 @@ const init_plugin = function () {
     let vcrIntegration = new VCRIntegration({});
     const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
 
-    $("body").on("click", "#vcrQueue #clearVcrQueue", $.proxy(eventHandler.handleClearQueueEvent, eventHandler));
-    $("body").on("click", "#vcrQueue li[data-vcr-url] a.removeFromVcrQueue", $.proxy(eventHandler.handleRemoveFromQueueEvent, eventHandler));
+    $("body").on("click", "#queue-component #clearVcrQueue", $.proxy(eventHandler.handleClearQueueEvent, eventHandler));
+    $("body").on("click", "#queue-component li[data-vcr-url] a.removeFromVcrQueue", $.proxy(eventHandler.handleRemoveFromQueueEvent, eventHandler));
+    $("body").on("click", "#queue-component .component-control-hide-toggle", $.proxy(eventHandler.handleVcrQueueMinimizedToggle, eventHandler));
 
     // if auto registration of handlers enabled
     if ($("a[data-vcr-url]").length) {

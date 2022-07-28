@@ -11,6 +11,8 @@
     "author": "CLARIN ERIC",
     "license": "GPLv3",
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.1.2",
+        "@fortawesome/free-solid-svg-icons": "^6.1.2",
         "handlebars": "4.7.7"
     },
     "devDependencies": {

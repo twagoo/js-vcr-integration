@@ -20,13 +20,16 @@ import logger from 'loglevel';
 import Handlebars from 'handlebars/lib/handlebars';
 import queueComponentTemplate from "./templates/queueComponent.handlebars";
 
+// icons and styling
+import { icons } from './Icons.js';
 import "./style/queue.scss";
 
 const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
     return queueComponentTemplate({
         submitEndpoint: config.endpointUrl || 'https://beta-collections.clarin.eu/submit/extensional',
         name: collectionMetadata.name || config.defaultName || 'No name',
-        items: queue
+        items: queue,
+        icons: config.icons || icons
     });
 };
 
