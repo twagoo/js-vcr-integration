@@ -8,7 +8,7 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'vcr-integration.js'
     },
-    mode: 'development',
+    mode: 'production',
     module: {
         rules: [
             {
