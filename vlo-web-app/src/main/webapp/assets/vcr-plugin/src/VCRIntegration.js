@@ -103,8 +103,8 @@ export class VCRIntegration {
     }
 
     renderQueue() {
-        if ($("body #vcrQueue").length) {
-            $("body #vcrQueue").remove();
+        if ($("body #queue-component").length) {
+            $("body #queue-component").remove();
         }
         const queue = this.getQueue();
         if (queue && queue.length > 0) {
