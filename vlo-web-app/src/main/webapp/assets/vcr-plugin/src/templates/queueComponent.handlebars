@@ -3,11 +3,12 @@
 }}
 
 <div class="vcr-plugin">
-    <div id="queue-component">
+    <div id="queue-component" class="well">
+        <div class="component-control">
+            <a class="component-control-hide-toggle do-hide" href="#">{{{icons.hide}}} Hide</a>
+            <a class="component-control-hide-toggle do-show" href="#">{{{icons.show}}} Show VCR queue ({{items.length}} items)</a>
+        </div>
         <div class="content">
-            <div class="component-control">
-                <a class="component-control-hide-toggle" href="#">{{{icons.hide}}} Hide</a>
-            </div>
             <h2>Items to submit to the VCR</h2>
             <form method="post" action="{{submitEndpoint}}">
                 <input type="hidden" name="name" value="{{name}}" />
@@ -25,14 +26,10 @@
                         </li>
                 {{/each}}
                 </ul>
-                <input id="submitVcrQueue" type="submit" value="Submit" />
-                <button id="clearVcrQueue">Clear</button>
+                <input class="btn btn-primary" id="submitVcrQueue" type="submit" value="Submit" />
+                <button class="btn btn-default" id="clearVcrQueue">Clear</button>
             </form>
         </div>
-        <div class="minimized-content">
-            <div class="component-control">
-                <a class="component-control-hide-toggle" href="#">{{{icons.show}}} Show VCR queue</a>
-            </div>
-        </div>
+        <div class="minimized-content"></div>
     </div>
 </div>

@@ -103,12 +103,21 @@ export class VCRIntegration {
     }
 
     renderQueue() {
+        // detect and remove existing queue component
+        var classAttrVal = null;
         if ($("body #queue-component").length) {
+            // capture value of class attribute to restore after rendering
+            classAttrVal = $("body #queue-component").attr('class');
             $("body #queue-component").remove();
         }
+        
+        // if there are items, render the queue component
         const queue = this.getQueue();
         if (queue && queue.length > 0) {
             $("body").append(renderQueueView(queue, this.config));
+            if (classAttrVal) {
+                $("body #queue-component").attr('class', classAttrVal);
+            }
         }
     }
 

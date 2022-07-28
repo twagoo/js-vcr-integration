@@ -21,32 +21,58 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #queue-component {
     position: fixed;
-    bottom: 5px;
-    right: 5px;
+    bottom: 0px;
+    right: 0px;
 
     z-index: 2000000; 
 
     min-width: 30em; 
     max-width: 50em;
 
-    padding: .5em 1em .5em .5em;
+    padding: 0;
 
     background: #fff;
     border: 1px solid #000;
+
+    .content {
+        padding: .5em 1em .5em .5em;
+    }
 
     .minimized-content {
         display: none;
     }
 
     &.minimized {
-        opacity: .8;
+        opacity: .9;
         min-width: unset;
 
         .content {
             display: none;
         }
+
         .minimized-content {
             display: block;
+        }
+
+        .component-control {
+
+            .component-control-hide-toggle {
+                &.do-hide { display: none; }
+                &.do-show { display: unset; }
+            }
+        }
+    }
+
+    .component-control
+    {
+        padding: 5px;
+        margin: 0;
+        background: #eee;
+
+        .component-control-hide-toggle {
+
+            //non-minimized
+            &.do-show { display: none; }
         }
     }
 }
