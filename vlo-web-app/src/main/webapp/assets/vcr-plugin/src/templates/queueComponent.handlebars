@@ -2,28 +2,27 @@
     HTML template for the queue component. See <https://handlebarsjs.com> 
 }}
 
-<div id="vcrQueue" style="position: fixed; top: 5px; right: 5px;
-                            min-width: 30em; max-width: 50em;
-                            z-index: 1000; padding: .5em 1em .5em .5em;
-                            background: #fff; border: 1px solid #000;">
-    <h2>Items to submit to the VCR</h2>
-    <form method="post" action="{{submitEndpoint}}">
-        <input type="hidden" name="name" value="{{name}}" />
-        <ul style="0 0 0 1em">
-        {{#each items}}
-                <li data-vcr-url="{{url}}">
-                {{title}}
-                <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a>
-                {{! Input value is produced with custom helper defined in src/templates/helpers }}
-                <input 
-                    type="hidden" 
-                    name="resourceUri" 
-                    value="{{resource_uri this}}" 
-                />
-                </li>
-        {{/each}}
-        </ul>
-        <input id="submitVcrQueue" type="submit" value="Submit" />
-        <button id="clearVcrQueue">Clear</button>
-    </form>
-</div>
+<div class="vcr-plugin">
+    <div id="queue-component">
+        <h2>Items to submit to the VCR</h2>
+        <form method="post" action="{{submitEndpoint}}">
+            <input type="hidden" name="name" value="{{name}}" />
+            <ul id="queue-items"">
+            {{#each items}}
+                    <li data-vcr-url="{{url}}">
+                    {{title}}
+                    <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a>
+                    {{! Input value is produced with custom helper defined in src/templates/helpers }}
+                    <input 
+                        type="hidden" 
+                        name="resourceUri" 
+                        value="{{resource_uri this}}" 
+                    />
+                    </li>
+            {{/each}}
+            </ul>
+            <input id="submitVcrQueue" type="submit" value="Submit" />
+            <button id="clearVcrQueue">Clear</button>
+        </form>
+    </div>
+    </div>

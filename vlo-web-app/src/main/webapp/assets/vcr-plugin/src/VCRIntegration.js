@@ -20,6 +20,8 @@ import logger from 'loglevel';
 import Handlebars from 'handlebars/lib/handlebars';
 import queueComponentTemplate from "./templates/queueComponent.handlebars";
 
+import "./style/queue.scss";
+
 const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
     return queueComponentTemplate({
         submitEndpoint: config.endpointUrl || 'https://beta-collections.clarin.eu/submit/extensional',

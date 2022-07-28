@@ -29,6 +29,15 @@ module.exports = {
                         knownHelpersOnly: false,
                     },
                 },
+            }, {
+                test: /\.(css|scss)$/i,
+                include: path.resolve(__dirname, 'src/style'),
+                use: [
+                    {loader: "style-loader"},
+                    {loader: "css-loader"},
+                    {loader: 'sass-loader', options: {sourceMap: true}},
+                    {loader: 'encapsulated-css-loader', options: {className: 'vcr-plugin'}}
+                ],
             }
         ]
     }
