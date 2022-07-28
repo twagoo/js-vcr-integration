@@ -19,8 +19,16 @@ module.exports = {
                     "presets": ["@babel/preset-env"]
                 }
             }, {
+                // Handlebars for templating. See https://handlebarsjs.com
                 test: /\.handlebars$/,
-                loader: "handlebars-loader"
+                loader: "handlebars-loader",
+                // Loading of custom helpers. See https://stackoverflow.com/a/48668117 
+                options: {
+                    helperDirs: path.join(__dirname, 'src/templates/helpers'),
+                    precompileOptions: {
+                        knownHelpersOnly: false,
+                    },
+                },
             }
         ]
     }

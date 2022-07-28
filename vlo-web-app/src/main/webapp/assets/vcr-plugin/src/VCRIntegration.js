@@ -20,21 +20,25 @@ import logger from 'loglevel';
 import Handlebars from 'handlebars/lib/handlebars';
 import queueComponentTemplate from "./templates/queueComponent.handlebars";
 
-const renderQueueView = function(config, queue, collectionMetadata) {
 
-    if (!config) config = {};
-    if (!collectionMetadata) collectionMetadata = {};
-    
-    for(var i in queue) {
-        queue[i]['resourceUriValue'] = JSON.stringify({
-            "uri": queue[i]['url'],
-            "label": queue[i]['title']
-        }).replaceAll('"', '&quot;');
-    }
+Handlebars.registerHelper('item_to_resource_uri', function () {
+    logger.info('item_to_resource_uri', this);
+    return JSON.stringify({
+        "uri": this.url,
+        "label": this.title
+    }).replaceAll('"', '&quot;');
+})
+
+const renderQueueView = function (config, queue, collectionMetadata) {
+    if (!config)
+        config = {};
+
+    if (!collectionMetadata)
+        collectionMetadata = {};
 
     return queueComponentTemplate({
         submitEndpoint: config.endpointUrl || 'https://beta-collections.clarin.eu/submit/extensional',
-        name : collectionMetadata.name || config.defaultName || 'No name',
+        name: collectionMetadata.name || config.defaultName || 'No name',
         items: queue
     });
 };
@@ -96,7 +100,7 @@ export class VCRIntegration {
     }
 
     addToQueue(url, title) {
-        if(this.getItemIndex(url) >= 0) {
+        if (this.getItemIndex(url) >= 0) {
             logger.info('URL already in queue, not adding again');
         } else {
             const queue = this.getQueue();
@@ -117,11 +121,11 @@ export class VCRIntegration {
             $("body").append(renderQueueView(this.config, queue));
         }
     }
-    
+
     setLogLevel(level) {
         logger.setLevel(level);
     }
-    
+
     setConfiguration(config, extend = true) {
         if (extend) {
             logger.debug('Extending configuration with new values', config);
@@ -133,18 +137,19 @@ export class VCRIntegration {
         logger.debug('Applying updated configuration', config);
         this._applyConfig();
     }
-    
+
     _applyConfig() {
         const cfg = this.config;
-        
-        if(!cfg) {
+
+        if (!cfg) {
             logger.warn('Configuration object not set, cannot apply configuration!');
         }
-        
+
         if (cfg.hasOwnProperty('logLevel')) {
             const logLevel = cfg['logLevel'];
             logger.info('Setting log level to ', logLevel);
             this.setLogLevel(logLevel);
         }
     }
-};
+}
+;

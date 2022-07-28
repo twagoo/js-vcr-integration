@@ -14,10 +14,11 @@
                 <li data-vcr-url="{{url}}">
                 {{title}}
                 <a class="removeFromVcrQueue" style="color: red; text-decoration: none;" href="#">X</a>
+                {{! Input value is produced with custom helper defined in src/templates/helpers }}
                 <input 
                     type="hidden" 
                     name="resourceUri" 
-                    value="{{resourceUri}}"
+                    value="{{resource_uri this}}" 
                 />
                 </li>
         {{/each}}
