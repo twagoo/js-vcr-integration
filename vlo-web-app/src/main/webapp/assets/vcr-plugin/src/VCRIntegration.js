@@ -20,22 +20,7 @@ import logger from 'loglevel';
 import Handlebars from 'handlebars/lib/handlebars';
 import queueComponentTemplate from "./templates/queueComponent.handlebars";
 
-
-Handlebars.registerHelper('item_to_resource_uri', function () {
-    logger.info('item_to_resource_uri', this);
-    return JSON.stringify({
-        "uri": this.url,
-        "label": this.title
-    }).replaceAll('"', '&quot;');
-})
-
-const renderQueueView = function (config, queue, collectionMetadata) {
-    if (!config)
-        config = {};
-
-    if (!collectionMetadata)
-        collectionMetadata = {};
-
+const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
     return queueComponentTemplate({
         submitEndpoint: config.endpointUrl || 'https://beta-collections.clarin.eu/submit/extensional',
         name: collectionMetadata.name || config.defaultName || 'No name',
@@ -54,7 +39,7 @@ export class VCRIntegration {
     getQueue() {
         const queue = window.localStorage.getItem('vcrQueue');
         if (queue) {
-            return JSON.parse(queue);//['content'];
+            return JSON.parse(queue);
         } else {
             return this.saveQueue([]);
         }
@@ -62,7 +47,7 @@ export class VCRIntegration {
 
     saveQueue(queue) {
         logger.debug('Saving queue: ', queue);
-        window.localStorage.setItem('vcrQueue', JSON.stringify(queue));//{'content': queue}));
+        window.localStorage.setItem('vcrQueue', JSON.stringify(queue));
         return queue;
     }
 
@@ -118,7 +103,7 @@ export class VCRIntegration {
         }
         const queue = this.getQueue();
         if (queue && queue.length > 0) {
-            $("body").append(renderQueueView(this.config, queue));
+            $("body").append(renderQueueView(queue, this.config));
         }
     }
 
