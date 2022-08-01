@@ -24,6 +24,9 @@ import queueComponentTemplate from "./templates/queueComponent.handlebars";
 import { icons } from './Icons.js';
 import "./style/queue.scss";
 
+// shared constants
+import {QUEUE_CONTROL_MINIMIZED_CLASS} from './Constants.js';
+
 const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
     return queueComponentTemplate({
         submitEndpoint: config.endpointUrl || 'https://beta-collections.clarin.eu/submit/extensional',
@@ -105,19 +108,48 @@ export class VCRIntegration {
     renderQueue() {
         // detect and remove existing queue component
         var classAttrVal = null;
-        if ($("body #queue-component").length) {
+        if (getQueueControlObject().length) {
             // capture value of class attribute to restore after rendering
-            classAttrVal = $("body #queue-component").attr('class');
-            $("body #queue-component").remove();
+            classAttrVal = getQueueControlObject().attr('class');
+            getQueueControlObject().remove();
         }
-        
+
         // if there are items, render the queue component
         const queue = this.getQueue();
         if (queue && queue.length > 0) {
             $("body").append(renderQueueView(queue, this.config));
             if (classAttrVal) {
-                $("body #queue-component").attr('class', classAttrVal);
+                getQueueControlObject().attr('class', classAttrVal);
             }
+        }
+    }
+
+    hideQueueControl() {
+        let component = getQueueControlObject();
+        if (component.hasClass(QUEUE_CONTROL_MINIMIZED_CLASS)) {
+            return false;
+        } else {
+            getQueueControlObject().addClass(QUEUE_CONTROL_MINIMIZED_CLASS);
+            return true;
+        }
+    }
+
+    showQueueControl() {
+        let component = getQueueControlObject();
+        if (component.hasClass(QUEUE_CONTROL_MINIMIZED_CLASS)) {
+            getQueueControlObject().removeClass(QUEUE_CONTROL_MINIMIZED_CLASS);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    toggleQueueControl() {
+        let component = getQueueControlObject();
+        if (component.hasClass(QUEUE_CONTROL_MINIMIZED_CLASS)) {
+            getQueueControlObject().removeClass(QUEUE_CONTROL_MINIMIZED_CLASS);
+        } else {
+            getQueueControlObject().addClass(QUEUE_CONTROL_MINIMIZED_CLASS);
         }
     }
 
@@ -151,4 +183,7 @@ export class VCRIntegration {
         }
     }
 }
-;
+
+const getQueueControlObject = function () {
+    return $("body #queue-component");
+};
