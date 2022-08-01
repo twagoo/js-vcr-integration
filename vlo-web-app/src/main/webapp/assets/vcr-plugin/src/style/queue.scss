@@ -21,10 +21,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #queue-component {
     position: fixed;
-    bottom: 0px;
-    right: 0px;
-
     z-index: 2000000; 
+    margin: 10px;
+    
+    &, &.bottom-right {
+        bottom: 0px; right: 0px;
+        top: unset; left: unset;
+    }
+
+    &.top-right {
+        top: 0px; right: 0px;
+        bottom: unset; left: unset;
+    }
+
+    &.bottom-left {
+        bottom: 0px; left: 0px;        
+        top: unset; right: unset;
+    }
+
+    &.top-left {
+        top: 0px; left: 0px;
+        bottom: unset; right: unset;
+    }
 
     min-width: 30em; 
     max-width: 50em;

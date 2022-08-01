@@ -16,4 +16,10 @@
  */
 
 
-export const QUEUE_CONTROL_MINIMIZED_CLASS = 'minimized';
+export const
+        QUEUE_CONTROL_MINIMIZED_CLASS = 'minimized',
+        SETTING_LOGLEVEL = 'logLevel',
+        SETTING_QUEUE_CONTROL_POSITION = 'queueControlPosition',
+        SETTING_ICONS = 'icons',
+        SETTING_ENDPOINT_URL = 'endpointUrl',
+        SETTING_DEFAULT_NAME = 'defaultName';

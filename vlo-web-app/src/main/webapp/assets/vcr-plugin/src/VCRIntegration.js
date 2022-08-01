@@ -26,14 +26,24 @@ import "./style/queue.scss";
 
 // shared constants
 import {QUEUE_CONTROL_MINIMIZED_CLASS} from './Constants.js';
+// configuration properties
+import {SETTING_LOGLEVEL, SETTING_QUEUE_CONTROL_POSITION,
+        SETTING_ICONS, SETTING_ENDPOINT_URL,
+        SETTING_DEFAULT_NAME} from './Constants.js';
+
 
 const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
-    return queueComponentTemplate({
-        submitEndpoint: config.endpointUrl || 'https://beta-collections.clarin.eu/submit/extensional',
-        name: collectionMetadata.name || config.defaultName || 'No name',
+    let values = {
+        config: config,
+        submitEndpoint: config[SETTING_ENDPOINT_URL] || 'https://beta-collections.clarin.eu/submit/extensional',
+        name: collectionMetadata.name || config[SETTING_DEFAULT_NAME] || 'No name',
         items: queue,
-        icons: config.icons || icons
-    });
+        position: config[SETTING_QUEUE_CONTROL_POSITION] || 'bottom-right',
+        icons: config[SETTING_ICONS] || icons
+    };
+
+    logger.debug('Rendering queue with', values);
+    return queueComponentTemplate(values);
 };
 
 export class VCRIntegration {
@@ -176,8 +186,8 @@ export class VCRIntegration {
             logger.warn('Configuration object not set, cannot apply configuration!');
         }
 
-        if (cfg.hasOwnProperty('logLevel')) {
-            const logLevel = cfg['logLevel'];
+        if (cfg.hasOwnProperty(SETTING_LOGLEVEL)) {
+            const logLevel = cfg[SETTING_LOGLEVEL];
             logger.info('Setting log level to ', logLevel);
             this.setLogLevel(logLevel);
         }

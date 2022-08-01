@@ -17,13 +17,21 @@
 
 import { VCRIntegration } from './VCRIntegration.js';
 import { VCRIntegrationEventHandler } from './VCRIntegrationEventHandler.js';
+import { SETTING_LOGLEVEL } from './Constants.js';
 
 import $ from 'jquery';
 import logger from 'loglevel';
 
 const init_plugin = function () {
-    //TODO: read configuration
-    let vcrIntegration = new VCRIntegration({});
+    let configuration = window.vcrIntegrationConfiguration || {};
+    if (configuration[SETTING_LOGLEVEL]) {
+        logger.setLevel(configuration[SETTING_LOGLEVEL]);
+        logger.info('Log level set from configuration:', configuration[SETTING_LOGLEVEL])
+    }
+
+    logger.info('Initialising VCR integration with configuration', configuration);
+
+    let vcrIntegration = new VCRIntegration(configuration);
     const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
 
     $("body").on("click", "#queue-component #clearVcrQueue", $.proxy(eventHandler.handleClearQueueEvent, eventHandler));
@@ -44,7 +52,7 @@ const init_plugin = function () {
     if (queue) {
         vcrIntegration.renderQueue();
     }
-    
+
     window.vcrIntegration = vcrIntegration;
 };
 
