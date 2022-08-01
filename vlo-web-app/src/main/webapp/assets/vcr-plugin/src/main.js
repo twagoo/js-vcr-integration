@@ -17,21 +17,36 @@
 
 import { VCRIntegration } from './VCRIntegration.js';
 import { VCRIntegrationEventHandler } from './VCRIntegrationEventHandler.js';
-import { SETTING_LOGLEVEL } from './Constants.js';
+import { SETTING_LOGLEVEL, SETTING_NO_INIT } from './Constants.js';
 
 import $ from 'jquery';
 import logger from 'loglevel';
 
-const init_plugin = function () {
-    let configuration = window.vcrIntegrationConfiguration || {};
+const global = this || window;
+
+const initPlugin = function (config) {
+    let configuration = config || {};
     if (configuration[SETTING_LOGLEVEL]) {
         logger.setLevel(configuration[SETTING_LOGLEVEL]);
-        logger.info('Log level set from configuration:', configuration[SETTING_LOGLEVEL])
+        logger.info('Log level set from configuration:', configuration[SETTING_LOGLEVEL]);
     }
 
     logger.info('Initialising VCR integration with configuration', configuration);
 
     let vcrIntegration = new VCRIntegration(configuration);
+    registerEventHandlers(vcrIntegration);
+
+    let queue = vcrIntegration.getQueue();
+    if (queue) {
+        vcrIntegration.renderQueue();
+    }
+
+    global.vcrIntegration = vcrIntegration;
+    return vcrIntegration;
+};
+global.initVcrIntegration = initPlugin;
+
+const registerEventHandlers = function (vcrIntegration) {
     const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
 
     $("body").on("click", "#queue-component #clearVcrQueue", $.proxy(eventHandler.handleClearQueueEvent, eventHandler));
@@ -47,15 +62,19 @@ const init_plugin = function () {
         // bind event to add to queue
         $("body").on("click", "a[data-vcr-url]", $.proxy(eventHandler.handleAddToQueueEvent, eventHandler));
     }
-
-    const queue = vcrIntegration.getQueue();
-    if (queue) {
-        vcrIntegration.renderQueue();
-    }
-
-    window.vcrIntegration = vcrIntegration;
 };
 
 logger.setLevel(logger.levels.INFO);
 // init when document ready
-$(document).ready(init_plugin);
+$(document).ready(function () {
+    let config = global.vcrIntegrationConfiguration;
+    if (config) {
+        if (config[SETTING_NO_INIT] === true) {
+            logger.warn("Configuration property", SETTING_NO_INIT, "set to true - skipping initalisation of VCR integration");
+        } else {
+            initPlugin(config);
+        }
+    } else {
+        initPlugin(null);
+    }
+});

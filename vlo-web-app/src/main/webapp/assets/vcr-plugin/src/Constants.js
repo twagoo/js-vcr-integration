@@ -22,4 +22,5 @@ export const
         SETTING_QUEUE_CONTROL_POSITION = 'queueControlPosition',
         SETTING_ICONS = 'icons',
         SETTING_ENDPOINT_URL = 'endpointUrl',
-        SETTING_DEFAULT_NAME = 'defaultName';
+        SETTING_DEFAULT_NAME = 'defaultName',
+        SETTING_NO_INIT = 'doNotInitialize';
