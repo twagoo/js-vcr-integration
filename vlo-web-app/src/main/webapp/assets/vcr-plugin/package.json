@@ -4,8 +4,8 @@
     "description": "",
     "main": "vcr-plugin.js",
     "scripts": {
-        "pack": "webpack",
-        "publish": "webpack-dev-server --output-public-path=../dist",
+        "pack": "webpack --mode=production --config webpack-prod.config.js",
+        "pack-dev": "webpack --mode=development --config webpack.config.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "CLARIN ERIC",
@@ -20,16 +20,20 @@
         "@babel/core": "^7.17.10",
         "@babel/preset-env": "^7.17.10",
         "babel-loader": "^8.2.5",
+        "braintree-jsdoc-template": "^3.3.0",
         "css-loader": "^6.7.1",
         "encapsulated-css-loader": "^1.0.0",
         "handlebars-loader": "^1.7.2",
         "jquery": "^3.6.0",
+        "jsdoc": "^3.6.11",
+        "jsdoc-webpack-plugin": "^0.3.0",
         "loglevel": "^1.8.0",
         "sass": "^1.54.0",
         "sass-loader": "^13.0.2",
         "style-loader": "^3.3.1",
         "webpack": "^5.72.1",
         "webpack-cli": "^4.9.2",
-        "webpack-dev-server": "^4.9.0"
+        "webpack-dev-server": "^4.9.0",
+        "webpack-merge": "^5.8.0"
     }
 }

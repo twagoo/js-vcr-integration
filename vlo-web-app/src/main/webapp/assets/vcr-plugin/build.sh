@@ -2,14 +2,15 @@
 set -e
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-PACK_MODE="production"
+
+NPM_SCRIPT='pack'
 
 for ARG in "$@"
 do
     case "${ARG}" in
         --dev)
             echo "Building in development mode"
-            PACK_MODE='development'
+            NPM_SCRIPT='pack-dev'
             ;;
         *)
             echo "Unknown argument: ${ARG}"
@@ -24,4 +25,4 @@ if ! [ -d "${SCRIPT_DIR}/node_modules" ]; then
 fi
 
 
-(cd "${SCRIPT_DIR}" && npm run pack -- --mode="${PACK_MODE}")
+(cd "${SCRIPT_DIR}" && npm run "${NPM_SCRIPT}")

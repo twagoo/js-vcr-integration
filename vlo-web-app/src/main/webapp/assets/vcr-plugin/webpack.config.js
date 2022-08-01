@@ -1,5 +1,9 @@
 const path = require('path');
 
+/**
+ * Webpack BASE configuration
+ * 
+ */
 module.exports = {
     mode: 'production',
     entry: {
