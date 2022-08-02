@@ -29,7 +29,14 @@ Other resource
 That is it. If a user clicks one of the annotated links a queue component will appear, allowing the user to manage the
 queue (i.e. remove items or clear the entire queue) and eventually submit the queue to the Virtual Collection Registry.
 
-### Configuration
+### Programmatic control
+
+After initalisation, a control object becomes available as `window.vcrIntegration`. It exposes an API that is
+[separately documented](https://clarin-eric.github.io/js-vcr-integration/VCRIntegration.html). Actions include queue
+item addition and removal, hiding and showing of the queue component, and changing any of the configuration properties
+(see below).
+
+## Configuration
 
 **Optionally** a configuration object can be defined in the `<head>` section and made available for use by the library 
 by assigning it to `window.vcrIntegrationConfiguration`:
@@ -57,12 +64,12 @@ The follow properties are supported:
 * `icons`: Can be used to pass an array that defines markup for icons to replace the default icons. See `Icons.js`
 for a list of properties.
 
-### Customisation
+## Customisation
 
-#### CSS
+### CSS
 
 `*TODO*`
 
-#### Icons
+### Icons
 
 `*TODO*`
