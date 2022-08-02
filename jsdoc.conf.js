@@ -24,7 +24,7 @@ module.exports = {
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     }, opts: {
-        "destination": "./dist/doc",
+        "destination": "./docs",
         "template": "node_modules/braintree-jsdoc-template"
     }, "sourceType": "module",
     "tags": {
