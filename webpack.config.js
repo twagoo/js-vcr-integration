@@ -1,4 +1,5 @@
 const path = require('path');
+const babelConfig = require('./babel.config.js')
 
 /**
  * Webpack BASE configuration
@@ -22,9 +23,7 @@ module.exports = {
                 test: /\.js$/,
                 include: path.resolve(__dirname, 'src'),
                 loader: 'babel-loader',
-                options: {
-                    "presets": ["@babel/preset-env"]
-                }
+                options: babelConfig
             }, {
                 // Handlebars for templating. See https://handlebarsjs.com
                 test: /\.handlebars$/,

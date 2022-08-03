@@ -25,4 +25,6 @@ if ! [ -d "${SCRIPT_DIR}/node_modules" ]; then
 fi
 
 
-(cd "${SCRIPT_DIR}" && npm run "${NPM_SCRIPT}")
+(cd "${SCRIPT_DIR}" \
+    && npm run test \
+    && npm run "${NPM_SCRIPT}")
