@@ -15,20 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { VCRIntegration } from './VCRIntegration.js';
-import { VCRIntegrationEventHandler } from './VCRIntegrationEventHandler.js';
-import { SETTING_LOGLEVEL, SETTING_NO_INIT } from './Constants.js';
-
 import $ from 'jquery';
 import logger from 'loglevel';
+
+import { VCRIntegration } from './VCRIntegration.js';
+import { VCRIntegrationEventHandler } from './VCRIntegrationEventHandler.js';
+import { mergeWithDefaultConfig } from './Configuration.js';
+// configuration properties
+import {configProperties as cfp} from './Configuration.js';
 
 const global = this || window;
 
 const initPlugin = function (config) {
-    let configuration = config || {};
-    if (configuration[SETTING_LOGLEVEL]) {
-        logger.setLevel(configuration[SETTING_LOGLEVEL]);
-        logger.info('Log level set from configuration:', configuration[SETTING_LOGLEVEL]);
+    let configuration = mergeWithDefaultConfig(config || {});
+    if (configuration[cfp.SETTING_LOGLEVEL]) {
+        logger.setLevel(configuration[cfp.SETTING_LOGLEVEL]);
+        logger.info('Log level set from configuration:', configuration[cfp.SETTING_LOGLEVEL]);
     }
 
     logger.info('Initialising VCR integration with configuration', configuration);
@@ -69,8 +71,13 @@ logger.setLevel(logger.levels.INFO);
 $(document).ready(function () {
     let config = global.vcrIntegrationConfiguration;
     if (config) {
-        if (config[SETTING_NO_INIT] === true) {
-            logger.warn("Configuration property", SETTING_NO_INIT, "set to true - skipping initalisation of VCR integration");
+        // allow for log level override through config
+        if (config[cfp.SETTING_LOGLEVEL]) {
+            logger.setLevel(config[cfp.SETTING_LOGLEVEL]);
+        }
+        // skip init?
+        if (config[cfp.SETTING_NO_INIT] === true) {
+            logger.warn("Configuration property", cfp.SETTING_NO_INIT, "set to true - skipping initalisation of VCR integration");
         } else {
             initPlugin(config);
         }
