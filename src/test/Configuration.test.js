@@ -35,7 +35,7 @@ test('Merging empty config should give the default config', () => {
     expect(defaultConfig).toEqual({
         "logLevel": "info",
         "queueControlPosition": "bottom-right",
-        "endpointUrl": "https://beta-collections.clarin.eu/submit/extensional",
+        "endpointUrl": "https://collections.clarin.eu/submit/extensional",
         "defaultName": "No name",
         "maxItemCount": 100,
         "autoInitialize": true

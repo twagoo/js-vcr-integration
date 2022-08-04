@@ -26,7 +26,7 @@ const configDefinitions = {
     "SETTING_LOGLEVEL": ["logLevel", "info"],
     "SETTING_QUEUE_CONTROL_POSITION": ["queueControlPosition", "bottom-right"],
     "SETTING_ICONS": "icons",
-    "SETTING_ENDPOINT_URL": ["endpointUrl", "https://beta-collections.clarin.eu/submit/extensional"],
+    "SETTING_ENDPOINT_URL": ["endpointUrl", "https://collections.clarin.eu/submit/extensional"],
     "SETTING_DEFAULT_NAME": ["defaultName", "No name"],
     "SETTING_AUTO_INIT": ["autoInitialize", true],
     "SETTING_MAX_ITEM_COUNT": ["maxItemCount", 100]
