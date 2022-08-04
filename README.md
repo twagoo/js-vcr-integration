@@ -52,8 +52,9 @@ The follow properties are supported:
 * `logLevel`: Log level for console output 
   * Value must be one of `debug`, `info`, `warn` or `silent`; see [loglevel](https://github.com/pimterry/loglevel)
   * Defaults to `info`
-* `doNotInitialize`: Set to `true` to disable automatic initialisation of the plugin
+* `autoInitialize`: Set to `false` to disable automatic initialisation of the plugin
   * Doing this renders the plugin inactive until programatically activated with a call to `window.initVcrIntegration()` 
+  * Defaults to `true`
 * `endpointUrl`: Base URL of the Virtual Collection endpoint 
   * Defaults to `https://collections.clarin.eu/submit/extensional`
 * `queueControlPosition`: Position for rendering the queue component 

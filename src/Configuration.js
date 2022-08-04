@@ -28,7 +28,7 @@ const configDefinitions = {
     "SETTING_ICONS": "icons",
     "SETTING_ENDPOINT_URL": ["endpointUrl", "https://beta-collections.clarin.eu/submit/extensional"],
     "SETTING_DEFAULT_NAME": ["defaultName", "No name"],
-    "SETTING_NO_INIT": "doNotInitialize",
+    "SETTING_AUTO_INIT": ["autoInitialize", true],
     "SETTING_MAX_ITEM_COUNT": ["maxItemCount", 100]
 };
 

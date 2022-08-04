@@ -37,6 +37,7 @@ test('Merging empty config should give the default config', () => {
         "queueControlPosition": "bottom-right",
         "endpointUrl": "https://beta-collections.clarin.eu/submit/extensional",
         "defaultName": "No name",
-        "maxItemCount": 100
+        "maxItemCount": 100,
+        "autoInitialize": true
     });
 });

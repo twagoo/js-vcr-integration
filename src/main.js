@@ -76,8 +76,8 @@ $(document).ready(function () {
             logger.setLevel(config[cfp.SETTING_LOGLEVEL]);
         }
         // skip init?
-        if (config[cfp.SETTING_NO_INIT] === true) {
-            logger.warn("Configuration property", cfp.SETTING_NO_INIT, "set to true - skipping initalisation of VCR integration");
+        if (config[cfp.SETTING_AUTO_INIT] === false) {
+            logger.info("Configuration property", cfp.SETTING_AUTO_INIT, "set to false - skipping initalisation of VCR integration");
         } else {
             initPlugin(config);
         }
