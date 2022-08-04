@@ -25,6 +25,7 @@
         "braintree-jsdoc-template": "^3.3.0",
         "css-loader": "^6.7.1",
         "encapsulated-css-loader": "^1.0.0",
+        "handlebars-jest": "^1.0.0",
         "handlebars-loader": "^1.7.2",
         "jest": "^28.1.3",
         "jquery": "^3.6.0",

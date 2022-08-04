@@ -26,7 +26,8 @@ module.exports = {
 
     // See https://stackoverflow.com/a/64223627
     transform: {
-        "^.+\\.(js|jsx)$": "babel-jest"
+        "^.+\\.(js|jsx)$": "babel-jest",
+        "^.+\\.handlebars$": "<rootDir>/node_modules/handlebars-jest"
     },
 
     // The root directory that Jest should scan for tests and modules within
@@ -44,7 +45,9 @@ module.exports = {
      ],
 
     // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-    // moduleNameMapper: {},
+    "moduleNameMapper": {
+        "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
+      },
 
     // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
     // modulePathIgnorePatterns: [],

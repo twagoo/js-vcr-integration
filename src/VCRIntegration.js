@@ -17,17 +17,16 @@
 
 import $ from 'jquery';
 import logger from 'loglevel';
-import Handlebars from 'handlebars/lib/handlebars';
-import queueComponentTemplate from "./templates/queueComponent.handlebars";
+import queueComponentTemplate from './templates/queueComponent.handlebars';
 
 // icons and styling
 import { icons } from './Icons.js';
 import "./style/queue.scss";
 
 // configuration properties
-import {configProperties as cfp} from './Configuration.js';
+import { configProperties as cfp } from './Configuration.js';
 // shared constants
-import {QUEUE_CONTROL_MINIMIZED_CLASS} from './Constants.js';
+import { QUEUE_CONTROL_MINIMIZED_CLASS } from './Constants.js';
 
 const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
     let values = {
@@ -111,28 +110,32 @@ export class VCRIntegration {
 
     /**
      * Removes an item from the queue on basis of its URL
-     * @param {String} url
+     * @param {String|Array} url
      * @returns {Boolean} whether an item has been removed
      */
     removeFromQueue(url) {
-        logger.debug('Remove from queue: ', url);
-        const index = this.getItemIndex(url);
-        if (index >= 0) {
-            logger.debug('Remove item ', index);
-
-            const queue = this.getQueue();
-            queue.splice(index, 1);
-
-            this.saveQueue(queue);
-            logger.info('Removed from queue');
-            return true;
+        if (Array.isArray(url)) {
+            url.forEach(u => this.removeFromQueue(u));
         } else {
-            return false;
+            logger.debug('Remove from queue: ', url);
+            const index = this.getItemIndex(url);
+            if (index >= 0) {
+                logger.debug('Remove item ', index);
+
+                const queue = this.getQueue();
+                queue.splice(index, 1);
+
+                this.saveQueue(queue);
+                logger.info('Removed from queue');
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
     /**
-     * Adds an item to the queue
+     * Adds a single item to the queue
      * @param {String} url URL of item
      * @param {String} title Title for item
      * @returns {None}
@@ -142,13 +145,28 @@ export class VCRIntegration {
             logger.info('URL already in queue, not adding again');
         } else {
             const queue = this.getQueue();
-            queue.push({'url': url, 'title': title});
+            queue.push({ 'url': url, 'title': title });
             this.saveQueue(queue);
             logger.info('Added to queue');
             logger.debug('New queue: ', this.getQueue());
             this.renderQueue();
         }
     }
+
+    /**
+     * Adds zero or more items to the queue
+     * @param {Array} items Array of objects with 'url' and 'title' options
+     */
+    addAllToQueue(items) {
+        items.forEach(item => {
+            if (item.hasOwnProperty('url') && item.hasOwnProperty('title')) {
+                this.addToQueue(item.url, item.title);
+            } else {
+                logger.error('Skipping item: does not contain url and/or title', item);
+            }
+        });
+    }
+
 
     /**
      * Renders or re-renders the queue component on the page
