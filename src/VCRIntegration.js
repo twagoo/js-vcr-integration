@@ -28,6 +28,8 @@ import { configProperties as cfp } from './Configuration.js';
 // shared constants
 import { QUEUE_CONTROL_MINIMIZED_CLASS } from './Constants.js';
 
+const global = this || window;
+
 const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
     let values = {
         config: config,
@@ -53,10 +55,21 @@ export class VCRIntegration {
      * @returns {VCRIntegration}
      * @class
      */
-    constructor(config) {
+    constructor(config, storage) {
         logger.debug('VCRIntegration constructed with configuration', config);
         this.config = config;
         this._applyConfig();
+
+        if (storage) {
+            this.storage = storage;
+        } else {
+            if (global && global.localStorage) {
+                logger.info('Using local storage provided by global context');
+                this.storage = global.localStorage;
+            } else {
+                logger.error('No localstorage on global object and no explicit storage passed to constructor');
+            }
+        }
     }
 
     /**
@@ -64,7 +77,7 @@ export class VCRIntegration {
      * @returns {Array} the queue
      */
     getQueue() {
-        const queue = window.localStorage.getItem('vcrQueue');
+        const queue = this.storage.getItem('vcrQueue');
         if (queue) {
             return JSON.parse(queue);
         } else {

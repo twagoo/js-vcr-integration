@@ -67,8 +67,8 @@ const registerEventHandlers = function (vcrIntegration) {
 };
 
 logger.setLevel(logger.levels.INFO);
-// init when document ready
-$(document).ready(function () {
+// init when ready
+$(() => {
     let config = global.vcrIntegrationConfiguration;
     if (config) {
         // allow for log level override through config

@@ -1,5 +1,6 @@
 const path = require('path');
-const babelConfig = require('./babel.config.js')
+const babelConfig = require('./babel.config.js');
+const handlebarsConfig = require('./handlebars.config.js');
 
 /**
  * Webpack BASE configuration
@@ -29,12 +30,7 @@ module.exports = {
                 test: /\.handlebars$/,
                 loader: "handlebars-loader",
                 // Loading of custom helpers. See https://stackoverflow.com/a/48668117 
-                options: {
-                    helperDirs: path.join(__dirname, 'src/templates/helpers'),
-                    precompileOptions: {
-                        knownHelpersOnly: false,
-                    },
-                },
+                options: handlebarsConfig,
             }, {
                 test: /\.(css|scss)$/i,
                 include: path.resolve(__dirname, 'src/style'),

@@ -3,6 +3,8 @@
  * https://jestjs.io/docs/configuration
  */
 
+const handlebarsConfig = require('./handlebars.config.js');
+
 module.exports = {
     // All imported modules in your tests should be mocked automatically
     // automock: false,
@@ -34,20 +36,27 @@ module.exports = {
     // rootDir: undefined,
 
     // A list of paths to directories that Jest should use to search for files in
-     roots: [
-       "<rootDir>/src/test"
-     ],
+    roots: [
+        "<rootDir>/src/test"
+    ],
 
     // The glob patterns Jest uses to detect test files
-     testMatch: [
-//       "**/__tests__/**/*.[jt]s?(x)",
-       "**/?(*.)+(spec|test).[tj]s?(x)"
-     ],
+    testMatch: [
+        //       "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[tj]s?(x)"
+    ],
 
     // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
     "moduleNameMapper": {
         "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
-      },
+    },
+
+    // The test environment that will be used for testing
+    // testEnvironment: "jest-environment-node",
+    testEnvironment: "jest-environment-jsdom",
+    "globals": {
+        "handlebars-jest": handlebarsConfig
+    },
 
     // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
     // modulePathIgnorePatterns: [],
@@ -93,9 +102,6 @@ module.exports = {
 
     // A list of paths to snapshot serializer modules Jest should use for snapshot testing
     // snapshotSerializers: [],
-
-    // The test environment that will be used for testing
-    // testEnvironment: "jest-environment-node",
 
     // Options that will be passed to the testEnvironment
     // testEnvironmentOptions: {},
