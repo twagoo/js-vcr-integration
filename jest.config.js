@@ -37,7 +37,7 @@ module.exports = {
 
     // A list of paths to directories that Jest should use to search for files in
     roots: [
-        "<rootDir>/src/test"
+        "<rootDir>/src/__tests__"
     ],
 
     // The glob patterns Jest uses to detect test files
@@ -48,7 +48,7 @@ module.exports = {
 
     // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
     "moduleNameMapper": {
-        "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
+        "\\.(css|scss)$": "<rootDir>/src/__mocks__/styleMock.js"
     },
 
     // The test environment that will be used for testing
