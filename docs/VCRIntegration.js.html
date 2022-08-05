@@ -77,7 +77,7 @@
 
     
 
-    <h3>Classes</h3><ul><li id="VCRIntegration-nav"><a href="VCRIntegration.html">VCRIntegration</a><ul class='methods'><li data-type="method" id="VCRIntegration-addToQueue-nav"><a href="VCRIntegration.html#addToQueue">addToQueue</a></li><li data-type="method" id="VCRIntegration-clearQueue-nav"><a href="VCRIntegration.html#clearQueue">clearQueue</a></li><li data-type="method" id="VCRIntegration-getItemIndex-nav"><a href="VCRIntegration.html#getItemIndex">getItemIndex</a></li><li data-type="method" id="VCRIntegration-getQueue-nav"><a href="VCRIntegration.html#getQueue">getQueue</a></li><li data-type="method" id="VCRIntegration-hideQueueControl-nav"><a href="VCRIntegration.html#hideQueueControl">hideQueueControl</a></li><li data-type="method" id="VCRIntegration-removeFromQueue-nav"><a href="VCRIntegration.html#removeFromQueue">removeFromQueue</a></li><li data-type="method" id="VCRIntegration-renderQueue-nav"><a href="VCRIntegration.html#renderQueue">renderQueue</a></li><li data-type="method" id="VCRIntegration-saveQueue-nav"><a href="VCRIntegration.html#saveQueue">saveQueue</a></li><li data-type="method" id="VCRIntegration-setConfiguration-nav"><a href="VCRIntegration.html#setConfiguration">setConfiguration</a></li><li data-type="method" id="VCRIntegration-setLogLevel-nav"><a href="VCRIntegration.html#setLogLevel">setLogLevel</a></li><li data-type="method" id="VCRIntegration-showQueueControl-nav"><a href="VCRIntegration.html#showQueueControl">showQueueControl</a></li><li data-type="method" id="VCRIntegration-toggleQueueControl-nav"><a href="VCRIntegration.html#toggleQueueControl">toggleQueueControl</a></li></ul></li></ul>
+    <h3>Classes</h3><ul><li id="VCRIntegration-nav"><a href="VCRIntegration.html">VCRIntegration</a><ul class='methods'><li data-type="method" id="VCRIntegration-addAllToQueue-nav"><a href="VCRIntegration.html#addAllToQueue">addAllToQueue</a></li><li data-type="method" id="VCRIntegration-addToQueue-nav"><a href="VCRIntegration.html#addToQueue">addToQueue</a></li><li data-type="method" id="VCRIntegration-clearQueue-nav"><a href="VCRIntegration.html#clearQueue">clearQueue</a></li><li data-type="method" id="VCRIntegration-getItemIndex-nav"><a href="VCRIntegration.html#getItemIndex">getItemIndex</a></li><li data-type="method" id="VCRIntegration-getQueue-nav"><a href="VCRIntegration.html#getQueue">getQueue</a></li><li data-type="method" id="VCRIntegration-hideQueueControl-nav"><a href="VCRIntegration.html#hideQueueControl">hideQueueControl</a></li><li data-type="method" id="VCRIntegration-removeFromQueue-nav"><a href="VCRIntegration.html#removeFromQueue">removeFromQueue</a></li><li data-type="method" id="VCRIntegration-renderQueue-nav"><a href="VCRIntegration.html#renderQueue">renderQueue</a></li><li data-type="method" id="VCRIntegration-saveQueue-nav"><a href="VCRIntegration.html#saveQueue">saveQueue</a></li><li data-type="method" id="VCRIntegration-setConfiguration-nav"><a href="VCRIntegration.html#setConfiguration">setConfiguration</a></li><li data-type="method" id="VCRIntegration-setLogLevel-nav"><a href="VCRIntegration.html#setLogLevel">setLogLevel</a></li><li data-type="method" id="VCRIntegration-showQueueControl-nav"><a href="VCRIntegration.html#showQueueControl">showQueueControl</a></li><li data-type="method" id="VCRIntegration-toggleQueueControl-nav"><a href="VCRIntegration.html#toggleQueueControl">toggleQueueControl</a></li></ul></li></ul>
   </nav>
 
   <div id="main">
@@ -111,17 +111,18 @@
 
 import $ from 'jquery';
 import logger from 'loglevel';
-import Handlebars from 'handlebars/lib/handlebars';
-import queueComponentTemplate from "./templates/queueComponent.handlebars";
+import queueComponentTemplate from './templates/queueComponent.handlebars';
 
 // icons and styling
 import { icons } from './Icons.js';
 import "./style/queue.scss";
 
 // configuration properties
-import {configProperties as cfp} from './Configuration.js';
+import { configProperties as cfp } from './Configuration.js';
 // shared constants
-import {QUEUE_CONTROL_MINIMIZED_CLASS} from './Constants.js';
+import { QUEUE_CONTROL_MINIMIZED_CLASS } from './Constants.js';
+
+const global = this || window;
 
 const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
     let values = {
@@ -148,10 +149,21 @@ export class VCRIntegration {
      * @returns {VCRIntegration}
      * @class
      */
-    constructor(config) {
+    constructor(config, storage) {
         logger.debug('VCRIntegration constructed with configuration', config);
         this.config = config;
         this._applyConfig();
+
+        if (storage) {
+            this.storage = storage;
+        } else {
+            if (global &amp;&amp; global.localStorage) {
+                logger.info('Using local storage provided by global context');
+                this.storage = global.localStorage;
+            } else {
+                logger.error('No localstorage on global object and no explicit storage passed to constructor');
+            }
+        }
     }
 
     /**
@@ -159,7 +171,7 @@ export class VCRIntegration {
      * @returns {Array} the queue
      */
     getQueue() {
-        const queue = window.localStorage.getItem('vcrQueue');
+        const queue = this.storage.getItem('vcrQueue');
         if (queue) {
             return JSON.parse(queue);
         } else {
@@ -205,28 +217,32 @@ export class VCRIntegration {
 
     /**
      * Removes an item from the queue on basis of its URL
-     * @param {String} url
+     * @param {String|Array} url
      * @returns {Boolean} whether an item has been removed
      */
     removeFromQueue(url) {
-        logger.debug('Remove from queue: ', url);
-        const index = this.getItemIndex(url);
-        if (index >= 0) {
-            logger.debug('Remove item ', index);
-
-            const queue = this.getQueue();
-            queue.splice(index, 1);
-
-            this.saveQueue(queue);
-            logger.info('Removed from queue');
-            return true;
+        if (Array.isArray(url)) {
+            url.forEach(u => this.removeFromQueue(u));
         } else {
-            return false;
+            logger.debug('Remove from queue: ', url);
+            const index = this.getItemIndex(url);
+            if (index >= 0) {
+                logger.debug('Remove item ', index);
+
+                const queue = this.getQueue();
+                queue.splice(index, 1);
+
+                this.saveQueue(queue);
+                logger.info('Removed from queue');
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
     /**
-     * Adds an item to the queue
+     * Adds a single item to the queue
      * @param {String} url URL of item
      * @param {String} title Title for item
      * @returns {None}
@@ -236,13 +252,28 @@ export class VCRIntegration {
             logger.info('URL already in queue, not adding again');
         } else {
             const queue = this.getQueue();
-            queue.push({'url': url, 'title': title});
+            queue.push({ 'url': url, 'title': title });
             this.saveQueue(queue);
             logger.info('Added to queue');
             logger.debug('New queue: ', this.getQueue());
             this.renderQueue();
         }
     }
+
+    /**
+     * Adds zero or more items to the queue
+     * @param {Array} items Array of objects with 'url' and 'title' options
+     */
+    addAllToQueue(items) {
+        items.forEach(item => {
+            if (item.hasOwnProperty('url') &amp;&amp; item.hasOwnProperty('title')) {
+                this.addToQueue(item.url, item.title);
+            } else {
+                logger.error('Skipping item: does not contain url and/or title', item);
+            }
+        });
+    }
+
 
     /**
      * Renders or re-renders the queue component on the page

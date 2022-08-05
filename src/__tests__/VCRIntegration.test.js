@@ -42,6 +42,31 @@ test('Adding same item twice, should only end up in queue once', () => {
     expect(vcrIntegration.getQueue()).toHaveLength(1);
 });
 
+
+test('Adding multiple items at once', () => {
+    const vcrIntegration = new VCRIntegration({});
+    expect(vcrIntegration.getQueue()).toHaveLength(0);
+    vcrIntegration.addAllToQueue([{ url: 'https://wwww.clarin.eu/1', title: 'test1' }]);
+    expect(vcrIntegration.getQueue()).toHaveLength(1);
+    expect(vcrIntegration.getQueue()).toContainEqual({ url: 'https://wwww.clarin.eu/1', title: 'test1' });
+    // add multiple
+    vcrIntegration.addAllToQueue([
+        { url: 'https://wwww.clarin.eu/2', title: 'test2' },
+        { url: 'https://wwww.clarin.eu/3', title: 'test3' }]);
+    expect(vcrIntegration.getQueue()).toHaveLength(3);
+    expect(vcrIntegration.getQueue()).toContainEqual({ url: 'https://wwww.clarin.eu/1', title: 'test1' });
+    // add existing
+    vcrIntegration.addAllToQueue([
+        { url: 'https://wwww.clarin.eu/1', title: 'test2' },
+        { url: 'https://wwww.clarin.eu/2', title: 'test3' }]);
+    expect(vcrIntegration.getQueue()).toHaveLength(3); // same as before
+    // add broken
+    vcrIntegration.addAllToQueue([
+        { foo: 'https://wwww.clarin.eu/4', title: 'test4' },
+        { url: 'https://wwww.clarin.eu/5', bar: 'test5' }]);
+    expect(vcrIntegration.getQueue()).toHaveLength(3); // same as before
+});
+
 test('Removing items', () => {
     const vcrIntegration = new VCRIntegration({});
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
