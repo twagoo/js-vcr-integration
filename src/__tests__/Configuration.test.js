@@ -24,7 +24,7 @@ logger.debug('Config properties', configProperties);
 logger.debug('Default config', defaultConfig);
 
 test('Size of config properties list', () => {
-   expect(Object.keys(configProperties)).toHaveLength(7);
+   expect(Object.keys(configProperties)).toHaveLength(8);
 });
 
 test('Content of config properties object', () => {

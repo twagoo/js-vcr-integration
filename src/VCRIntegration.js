@@ -37,7 +37,8 @@ const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
         name: collectionMetadata.name || config[cfp.SETTING_DEFAULT_NAME],
         items: queue,
         position: config[cfp.SETTING_QUEUE_CONTROL_POSITION],
-        icons: config[cfp.SETTING_ICONS] || icons
+        icons: config[cfp.SETTING_ICONS] || icons,
+        customClass: config[cfp.SETTING_CUSTOM_QUEUE_COMPONENT_CLASS] || ""
     };
 
     logger.debug('Rendering queue with', values);
