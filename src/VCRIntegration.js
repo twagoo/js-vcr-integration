@@ -178,13 +178,23 @@ export class VCRIntegration {
      * @param {Array} items Array of objects with 'url' and 'title' options
      */
     addAllToQueue(items) {
-        items.forEach(item => {
-            if (item.hasOwnProperty('url') && item.hasOwnProperty('title')) {
-                this.addToQueue(item.url, item.title);
+        if (items.length == 0) {
+            logger.info('No items in add request');
+        } else {
+            const queue = this.getQueue();
+            if (queue.length + items.length >= this.config[cfp.SETTING_MAX_ITEM_COUNT]) {
+                logger.warn("Cannot add item(s), maximum number of items in queue will be reached or exceeded (", this.config[cfp.SETTING_MAX_ITEM_COUNT], ")")
+                this.setErrorMessage("Cannot add items, queue length reached");
             } else {
-                logger.warn('Skipping item: does not contain url and/or title', item);
+                items.forEach(item => {
+                    if (item.hasOwnProperty('url') && item.hasOwnProperty('title')) {
+                        this.addToQueue(item.url, item.title);
+                    } else {
+                        logger.warn('Skipping item: does not contain url and/or title', item);
+                    }
+                });
             }
-        });
+        }
     }
 
 

@@ -87,3 +87,32 @@ test('Removing items', () => {
     vcrIntegration.removeFromQueue(['https://wwww.clarin.eu/2', 'https://wwww.clarin.eu/3']);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
 });
+
+test('Adding item beyond limit', () => {
+    // set item limit to 1
+    config[cfp.SETTING_MAX_ITEM_COUNT] = 1;
+    const vcrIntegration = new VCRIntegration(config);
+    expect(vcrIntegration.getQueue()).toHaveLength(0);
+    // first item should be accepted
+    vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
+    expect(vcrIntegration.getQueue()).toHaveLength(1);
+    // further items should be refused
+    vcrIntegration.addToQueue('https://wwww.clarin.eu/2', 'test2');
+    expect(vcrIntegration.getQueue()).toHaveLength(1);
+    vcrIntegration.addAllToQueue([
+        { url: 'https://wwww.clarin.eu/3', title: 'test3' },
+        { url: 'https://wwww.clarin.eu/4', title: 'test4' }]);
+    expect(vcrIntegration.getQueue()).toHaveLength(1);
+});
+
+test('Adding multiple beyond limit', () => {
+    // set item limit to 1
+    config[cfp.SETTING_MAX_ITEM_COUNT] = 1;
+    const vcrIntegration = new VCRIntegration(config);
+    expect(vcrIntegration.getQueue()).toHaveLength(0);
+    // all items should be refused
+    vcrIntegration.addAllToQueue([
+        { url: 'https://wwww.clarin.eu/1', title: 'test1' },
+        { url: 'https://wwww.clarin.eu/2', title: 'test2' }]);
+    expect(vcrIntegration.getQueue()).toHaveLength(0);
+});
