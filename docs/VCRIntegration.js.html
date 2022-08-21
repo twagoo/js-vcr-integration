@@ -313,7 +313,10 @@ export class VCRIntegration {
                 getQueueControlObject().attr('class', classAttrVal);
             }
             // make sure that the last (i.e. added) item is in view
-            $('ul.queue-items li:nth-last-child(1)', getQueueControlObject())[0].scrollIntoView();
+            const listItems = $('ul.queue-items li:nth-last-child(1)', getQueueControlObject());
+            if (listItems.length > 0) {
+                listItems[0].scrollIntoView();
+            }
         }
     }
 
