@@ -54,6 +54,7 @@ const registerEventHandlers = function (vcrIntegration) {
     $("body").on("click", "#queue-component #clearVcrQueue", $.proxy(eventHandler.handleClearQueueEvent, eventHandler));
     $("body").on("click", "#queue-component li[data-vcr-url] a.removeFromVcrQueue", $.proxy(eventHandler.handleRemoveFromQueueEvent, eventHandler));
     $("body").on("click", "#queue-component .component-control-hide-toggle", $.proxy(eventHandler.handleVcrQueueMinimizedToggle, eventHandler));
+    $("body").on("click", "#queue-component .alert .close", $.proxy(eventHandler.handleCloseWarning, eventHandler));
 
     // if auto registration of handlers enabled
     if ($("a[data-vcr-url]").length) {

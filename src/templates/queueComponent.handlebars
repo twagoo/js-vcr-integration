@@ -9,6 +9,10 @@
             <a class="component-control-hide-toggle do-show" href="#">{{{icons.show}}} Show VCR queue ({{items.length}} items)</a>
         </div>
         <div class="content">
+            <div class="queue-control-message-content-container alert alert-danger hidden" role="alert">
+                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span class="queue-control-message-content"></span>
+            </div>
             <h2>Items to submit to the VCR</h2>
             <form method="post" action="{{submitEndpoint}}">
                 <input type="hidden" name="name" value="{{name}}" />

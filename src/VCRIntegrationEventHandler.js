@@ -62,4 +62,8 @@ export class VCRIntegrationEventHandler {
         logger.debug('Handling toggling queue component minimized state event');
         self.vcrIntegration.toggleQueueControl();
     }
+
+    handleCloseWarning(event) {
+        self.vcrIntegration.clearErrorMessage($(event.currentTarget).parent());
+    }
 }

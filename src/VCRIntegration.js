@@ -17,6 +17,7 @@
 
 import $ from 'jquery';
 import logger from 'loglevel';
+import _escape from 'lodash/escape';
 import queueComponentTemplate from './templates/queueComponent.handlebars';
 
 // icons and styling
@@ -159,11 +160,16 @@ export class VCRIntegration {
             logger.info('URL already in queue, not adding again');
         } else {
             const queue = this.getQueue();
-            queue.push({ 'url': url, 'title': title });
-            this.saveQueue(queue);
-            logger.info('Added to queue');
-            logger.debug('New queue: ', this.getQueue());
-            this.renderQueue();
+            if (queue.length >= this.config[cfp.SETTING_MAX_ITEM_COUNT]) {
+                logger.warn("Cannot add item, maximum number of items in queue reached or exceeded (", this.config[cfp.SETTING_MAX_ITEM_COUNT], ")")
+                this.setErrorMessage("Queue is full, cannot add more items");
+            } else {
+                queue.push({ 'url': url, 'title': title });
+                this.saveQueue(queue);
+                logger.info('Added to queue');
+                logger.debug('New queue: ', this.getQueue());
+                this.renderQueue();
+            }
         }
     }
 
@@ -244,6 +250,23 @@ export class VCRIntegration {
         } else {
             getQueueControlObject().addClass(QUEUE_CONTROL_MINIMIZED_CLASS);
         }
+    }
+
+    setErrorMessage(message) {
+        const messageContainer = $("#queue-component .queue-control-message-content-container");
+        const messageContent = messageContainer.children('.queue-control-message-content');
+
+        //unhide container
+        messageContainer.removeClass('hidden');
+        // append message
+        messageContent.append('<div>' + _escape(message) + '</div>');
+    }
+
+    clearErrorMessage(containerElement) {
+        //set container to hidden mode
+        containerElement.addClass('hidden');
+        //clear message content
+        containerElement.children('.queue-control-message-content').html('');
     }
 
     /**
