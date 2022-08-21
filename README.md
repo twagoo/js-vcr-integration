@@ -64,6 +64,8 @@ The follow properties are supported:
   * Leave unconfigured for no default name
 * `icons`: Can be used to pass an array that defines markup for icons to replace the default icons. See `Icons.js`
 for a list of properties.
+* `autoDisableAddedItemLinks`: ..
+* `customQueueComponentClass`: ..
 
 ## Customisation
 

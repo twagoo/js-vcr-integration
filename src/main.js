@@ -38,8 +38,8 @@ const initPlugin = function (config) {
     let vcrIntegration = new VCRIntegration(configuration);
     registerEventHandlers(vcrIntegration);
 
-    let queue = vcrIntegration.getQueue();
-    if (queue) {
+    if (vcrIntegration.getQueue()) {
+        vcrIntegration.updatedAddLinkEnabledState();
         vcrIntegration.renderQueue();
     }
 
@@ -57,7 +57,7 @@ const registerEventHandlers = function (vcrIntegration) {
     $("body").on("click", "#queue-component .alert .close", $.proxy(eventHandler.handleCloseWarning, eventHandler));
 
     // if auto registration of handlers enabled
-    if ($("a[data-vcr-url]").length) {
+    if ($("a[data-vcr-url]").length > 0) {
         logger.debug("Found one or more VCR queue item controls: " + $("a[data-vcr-url]").length);
 
         // TODO: render 'add to queue' buttons where placeholders are defined

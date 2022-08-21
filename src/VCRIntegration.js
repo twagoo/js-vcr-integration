@@ -106,6 +106,9 @@ export class VCRIntegration {
         logger.debug('Clearing queue: ', this.getQueue());
         window.localStorage.removeItem('vcrQueue');
         logger.info('Queue cleared');
+
+        // any links to add items to the queue need to get re-enabled
+        this.updatedAddLinkEnabledState(true);
     }
 
     /**
@@ -142,6 +145,10 @@ export class VCRIntegration {
 
                 this.saveQueue(queue);
                 logger.info('Removed from queue');
+
+                // any links to add this item to the queue needs to get re-enabled
+                this.updatedAddLinkEnabledState(true);
+
                 return true;
             } else {
                 return false;
@@ -169,6 +176,9 @@ export class VCRIntegration {
                 logger.info('Added to queue');
                 logger.debug('New queue: ', this.getQueue());
                 this.renderQueue();
+
+                // links adding this item to the queue should get disabled
+                this.updatedAddLinkEnabledState(true);
             }
         }
     }
@@ -282,6 +292,15 @@ export class VCRIntegration {
         containerElement.addClass('hidden');
         //clear message content
         $('.queue-control-message-content', containerElement).html('');
+    }
+
+    updatedAddLinkEnabledState(onlyIfConfigAllows = false) {
+        if (!onlyIfConfigAllows || this.config[cfp.SETTING_AUTO_DISABLE_ADDED_ITEM_LINKS]) {
+            $('a[data-vcr-url]').removeAttr('disabled');
+            this.getQueue().forEach((item) => {
+                $('a[data-vcr-url="' + item['url'] + '"]').attr('disabled', 'disabled');
+            });
+        }
     }
 
     /**

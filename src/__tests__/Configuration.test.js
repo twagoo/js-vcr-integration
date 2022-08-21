@@ -24,7 +24,7 @@ logger.debug('Config properties', configProperties);
 logger.debug('Default config', defaultConfig);
 
 test('Size of config properties list', () => {
-   expect(Object.keys(configProperties)).toHaveLength(8);
+   expect(Object.keys(configProperties)).toHaveLength(9);
 });
 
 test('Content of config properties object', () => {
@@ -38,6 +38,7 @@ test('Merging empty config should give the default config', () => {
         "endpointUrl": "https://collections.clarin.eu/submit/extensional",
         "defaultName": "No name",
         "maxItemCount": 100,
-        "autoInitialize": true
+        "autoInitialize": true,
+        "autoDisableAddedItemLinks": true
     });
 });

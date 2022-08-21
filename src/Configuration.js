@@ -30,7 +30,8 @@ const configDefinitions = {
     "SETTING_DEFAULT_NAME": ["defaultName", "No name"],
     "SETTING_AUTO_INIT": ["autoInitialize", true],
     "SETTING_MAX_ITEM_COUNT": ["maxItemCount", 100],
-    "SETTING_CUSTOM_QUEUE_COMPONENT_CLASS": "customQueueComponentClass"
+    "SETTING_CUSTOM_QUEUE_COMPONENT_CLASS": "customQueueComponentClass",
+    "SETTING_AUTO_DISABLE_ADDED_ITEM_LINKS": ["autoDisableAddedItemLinks", true]
 };
 
 export const configProperties = _mapValues(configDefinitions, (value) => {
