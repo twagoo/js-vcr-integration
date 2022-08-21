@@ -182,7 +182,7 @@ export class VCRIntegration {
             if (item.hasOwnProperty('url') && item.hasOwnProperty('title')) {
                 this.addToQueue(item.url, item.title);
             } else {
-                logger.error('Skipping item: does not contain url and/or title', item);
+                logger.warn('Skipping item: does not contain url and/or title', item);
             }
         });
     }

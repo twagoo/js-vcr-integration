@@ -16,26 +16,31 @@
  */
 
 import { VCRIntegration } from './../VCRIntegration.js';
-import logger from 'loglevel';
+// configuration properties
+import { defaultConfig, configProperties as cfp } from '../Configuration.js';
+import _cloneDeep from 'lodash/cloneDeep';
+
+var config;
 
 beforeEach(() => {
     window.localStorage.clear();
+    config = _cloneDeep(defaultConfig);
 });
 
 test('Start with empty queue', () => {
-    const vcrIntegration = new VCRIntegration({});
+    const vcrIntegration = new VCRIntegration(config);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
 });
 
 test('Adding item', () => {
-    const vcrIntegration = new VCRIntegration({});
+    const vcrIntegration = new VCRIntegration(config);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
     expect(vcrIntegration.getQueue()).toHaveLength(1);
 });
 
 test('Adding same item twice, should only end up in queue once', () => {
-    const vcrIntegration = new VCRIntegration({});
+    const vcrIntegration = new VCRIntegration(config);
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
     expect(vcrIntegration.getQueue()).toHaveLength(1);
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
@@ -44,7 +49,7 @@ test('Adding same item twice, should only end up in queue once', () => {
 
 
 test('Adding multiple items at once', () => {
-    const vcrIntegration = new VCRIntegration({});
+    const vcrIntegration = new VCRIntegration(config);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     vcrIntegration.addAllToQueue([{ url: 'https://wwww.clarin.eu/1', title: 'test1' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(1);
@@ -68,7 +73,7 @@ test('Adding multiple items at once', () => {
 });
 
 test('Removing items', () => {
-    const vcrIntegration = new VCRIntegration({});
+    const vcrIntegration = new VCRIntegration(config);
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
     vcrIntegration.addToQueue('https://wwww.clarin.eu/2', 'test2');
     vcrIntegration.addToQueue('https://wwww.clarin.eu/3', 'test3');
