@@ -88,9 +88,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         background: #eee;
 
         .component-control-hide-toggle {
-
             //non-minimized
             &.do-show { display: none; }
+        }
+
+        .component-control-help {
+            float: right;
+            margin-left: 1em;
         }
     }
 }

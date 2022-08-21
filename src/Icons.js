@@ -19,11 +19,13 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 // import individual icons to avoid including all icons
 import {faCircleChevronUp,
         faCircleChevronDown,
-        faTrash
+        faTrash,
+        faCircleQuestion
 } from '@fortawesome/free-solid-svg-icons'
 
 export const icons = {
     "hide": icon(faCircleChevronDown).html,
     "show": icon(faCircleChevronUp).html,
-    "remove": icon(faTrash).html
+    "remove": icon(faTrash).html,
+    "help": icon(faCircleQuestion).html
 }
