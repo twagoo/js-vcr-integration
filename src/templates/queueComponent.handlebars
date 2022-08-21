@@ -16,7 +16,7 @@
             <h2>Items to submit to the VCR</h2>
             <form method="post" action="{{submitEndpoint}}">
                 <input type="hidden" name="name" value="{{name}}" />
-                <ul id="queue-items"">
+                <ul class="queue-items"">
                 {{#each items}}
                         <li data-vcr-url="{{url}}">
                         {{title}}

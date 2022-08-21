@@ -15,12 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { VCRIntegration } from './../VCRIntegration.js';
-// configuration properties
-import { defaultConfig, configProperties as cfp } from '../Configuration.js';
+import 'jest';
 import _cloneDeep from 'lodash/cloneDeep';
 
+import { VCRIntegration } from './../VCRIntegration.js';
+
+// Configuration
+import { defaultConfig, configProperties as cfp } from '../Configuration.js';
+
 var config;
+
+beforeAll(() => {
+    Element.prototype.scrollIntoView = jest.fn();
+});
 
 beforeEach(() => {
     window.localStorage.clear();
@@ -91,6 +98,7 @@ test('Removing items', () => {
 test('Adding item beyond limit', () => {
     // set item limit to 1
     config[cfp.SETTING_MAX_ITEM_COUNT] = 1;
+    
     const vcrIntegration = new VCRIntegration(config);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     // first item should be accepted
@@ -108,6 +116,7 @@ test('Adding item beyond limit', () => {
 test('Adding multiple beyond limit', () => {
     // set item limit to 1
     config[cfp.SETTING_MAX_ITEM_COUNT] = 1;
+    
     const vcrIntegration = new VCRIntegration(config);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     // all items should be refused

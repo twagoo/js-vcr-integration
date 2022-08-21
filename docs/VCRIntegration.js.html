@@ -267,35 +267,28 @@ export class VCRIntegration {
         }
     }
 
-    setErrorMessage(message) {
-        const messageContainer = $("#queue-component .queue-control-message-content-container");
-        const messageContent = messageContainer.children('.queue-control-message-content');
-
-        //unhide container
-        messageContainer.removeClass('hidden');
-        // append message
-        messageContent.append('&lt;div>' + _escape(message) + '&lt;/div>');
-    }
-
-    clearErrorMessage(containerElement) {
-        //set container to hidden mode
-        containerElement.addClass('hidden');
-        //clear message content
-        containerElement.children('.queue-control-message-content').html('');
-    }
-
     /**
      * Adds zero or more items to the queue
      * @param {Array} items Array of objects with 'url' and 'title' options
      */
     addAllToQueue(items) {
-        items.forEach(item => {
-            if (item.hasOwnProperty('url') &amp;&amp; item.hasOwnProperty('title')) {
-                this.addToQueue(item.url, item.title);
+        if (items.length == 0) {
+            logger.info('No items in add request');
+        } else {
+            const queue = this.getQueue();
+            if (queue.length + items.length >= this.config[cfp.SETTING_MAX_ITEM_COUNT]) {
+                logger.warn("Cannot add item(s), maximum number of items in queue will be reached or exceeded (", this.config[cfp.SETTING_MAX_ITEM_COUNT], ")")
+                this.setErrorMessage("Cannot add items, queue length reached");
             } else {
-                logger.error('Skipping item: does not contain url and/or title', item);
+                items.forEach(item => {
+                    if (item.hasOwnProperty('url') &amp;&amp; item.hasOwnProperty('title')) {
+                        this.addToQueue(item.url, item.title);
+                    } else {
+                        logger.warn('Skipping item: does not contain url and/or title', item);
+                    }
+                });
             }
-        });
+        }
     }
 
 
@@ -319,6 +312,8 @@ export class VCRIntegration {
             if (classAttrVal) {
                 getQueueControlObject().attr('class', classAttrVal);
             }
+            // make sure that the last (i.e. added) item is in view
+            $('ul.queue-items li:nth-last-child(1)', getQueueControlObject())[0].scrollIntoView();
         }
     }
 
@@ -361,6 +356,23 @@ export class VCRIntegration {
         } else {
             getQueueControlObject().addClass(QUEUE_CONTROL_MINIMIZED_CLASS);
         }
+    }
+
+    setErrorMessage(message) {
+        const messageContainer = $("#queue-component .queue-control-message-content-container");
+        const messageContent = $('.queue-control-message-content', messageContainer);
+
+        //unhide container
+        messageContainer.removeClass('hidden');
+        // append message
+        messageContent.append('&lt;div>' + _escape(message) + '&lt;/div>');
+    }
+
+    clearErrorMessage(containerElement) {
+        //set container to hidden mode
+        containerElement.addClass('hidden');
+        //clear message content
+        $('.queue-control-message-content', containerElement).html('');
     }
 
     /**

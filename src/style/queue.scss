@@ -95,6 +95,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 }
 
-#queue-items {
+ul.queue-items {
     margin: 0 1em 1em .5em;
+    max-height: 10em;
+    overflow-y: auto;
 }

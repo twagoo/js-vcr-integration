@@ -218,6 +218,11 @@ export class VCRIntegration {
             if (classAttrVal) {
                 getQueueControlObject().attr('class', classAttrVal);
             }
+            // make sure that the last (i.e. added) item is in view
+            const listItems = $('ul.queue-items li:nth-last-child(1)', getQueueControlObject());
+            if (listItems.length > 0) {
+                listItems[0].scrollIntoView();
+            }
         }
     }
 
@@ -264,7 +269,7 @@ export class VCRIntegration {
 
     setErrorMessage(message) {
         const messageContainer = $("#queue-component .queue-control-message-content-container");
-        const messageContent = messageContainer.children('.queue-control-message-content');
+        const messageContent = $('.queue-control-message-content', messageContainer);
 
         //unhide container
         messageContainer.removeClass('hidden');
@@ -276,7 +281,7 @@ export class VCRIntegration {
         //set container to hidden mode
         containerElement.addClass('hidden');
         //clear message content
-        containerElement.children('.queue-control-message-content').html('');
+        $('.queue-control-message-content', containerElement).html('');
     }
 
     /**
