@@ -4,6 +4,7 @@ set -e
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 NPM_SCRIPT='pack'
+RUN_TESTS='true'
 
 for ARG in "$@"
 do
@@ -11,6 +12,10 @@ do
         --dev)
             echo "Building in development mode"
             NPM_SCRIPT='pack-dev'
+            ;;
+        --skipTests)
+            echo "Skipping tests"
+            RUN_TESTS='false'
             ;;
         *)
             echo "Unknown argument: ${ARG}"
@@ -26,5 +31,5 @@ fi
 
 
 (cd "${SCRIPT_DIR}" \
-    && npm run test \
+    && ([ "${RUN_TESTS}" != 'true' ] || npm run test) \
     && npm run "${NPM_SCRIPT}")
