@@ -19,6 +19,7 @@ import $ from 'jquery';
 import logger from 'loglevel';
 import _escape from 'lodash/escape';
 import queueComponentTemplate from './templates/queueComponent.handlebars';
+import helpTemplate from './templates/info.handlebars';
 
 // icons and styling
 import { icons } from './Icons.js';
@@ -301,6 +302,10 @@ export class VCRIntegration {
                 $('a[data-vcr-url="' + item['url'] + '"]').attr('disabled', 'disabled');
             });
         }
+    }
+
+    showHelp() {
+        $('body').append(helpTemplate());
     }
 
     /**

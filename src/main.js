@@ -55,6 +55,10 @@ const registerEventHandlers = function (vcrIntegration) {
     $("body").on("click", "#queue-component li[data-vcr-url] a.removeFromVcrQueue", $.proxy(eventHandler.handleRemoveFromQueueEvent, eventHandler));
     $("body").on("click", "#queue-component .component-control-hide-toggle", $.proxy(eventHandler.handleVcrQueueMinimizedToggle, eventHandler));
     $("body").on("click", "#queue-component .alert .close", $.proxy(eventHandler.handleCloseWarning, eventHandler));
+    $("body").on("click", "#queue-component .component-control-help", $.proxy(eventHandler.handleShowHelp, eventHandler));
+    $("body").on("click", '.vcr-modal button[data-dismiss="modal"]', (evt) => {
+        $(evt.currentTarget).parents('.vcr-modal').detach();
+    });
 
     // if auto registration of handlers enabled
     if ($("a[data-vcr-url]").length > 0) {

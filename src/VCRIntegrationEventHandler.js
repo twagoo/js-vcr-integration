@@ -66,4 +66,8 @@ export class VCRIntegrationEventHandler {
     handleCloseWarning(event) {
         self.vcrIntegration.clearErrorMessage($(event.currentTarget).parent());
     }
+
+    handleShowHelp() {
+        self.vcrIntegration.showHelp();
+    }
 }
