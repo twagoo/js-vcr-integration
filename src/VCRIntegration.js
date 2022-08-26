@@ -278,6 +278,10 @@ export class VCRIntegration {
         }
     }
 
+    /**
+     * Adds an error message to the component
+     * @param {string} message to show
+     */
     setErrorMessage(message) {
         const messageContainer = $("#queue-component .queue-control-message-content-container");
         const messageContent = $('.queue-control-message-content', messageContainer);
@@ -288,6 +292,10 @@ export class VCRIntegration {
         messageContent.append('<div>' + _escape(message) + '</div>');
     }
 
+    /**
+     * Clears the specified error message(s) element
+     * @param {object} containerElement element to clear
+     */
     clearErrorMessage(containerElement) {
         //set container to hidden mode
         containerElement.addClass('hidden');
@@ -295,6 +303,10 @@ export class VCRIntegration {
         $('.queue-control-message-content', containerElement).html('');
     }
 
+    /**
+     * Enables and disables 'add to queue' links based on queue content
+     * @param {Boolean} onlyIfConfigAllows if true, does nothing unless configuration allows auto enable/disable
+     */
     updatedAddLinkEnabledState(onlyIfConfigAllows = false) {
         if (!onlyIfConfigAllows || this.config[cfp.SETTING_AUTO_DISABLE_ADDED_ITEM_LINKS]) {
             $('a[data-vcr-url]').removeAttr('disabled');
@@ -304,6 +316,9 @@ export class VCRIntegration {
         }
     }
 
+    /**
+     * Shows a modal dialogue with help/info
+     */
     showHelp() {
         $('body').append(helpTemplate());
     }
