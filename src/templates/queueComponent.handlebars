@@ -16,6 +16,15 @@ HTML template for the queue component. See <https: //handlebarsjs.com>
                             aria-hidden="true">&times;</span></button>
                     <span class="queue-control-message-content"></span>
                 </div>
+
+                {{#if submitted}}
+                <div class="alert alert-warning" role="alert">
+                    <button type="button" class="close" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <span class="queue-control-message-content">The queue has already been submitted. <a href="#" class="clearVcrQueue">Clear the queue.</a></span>
+                </div>
+                {{/if}}
+                
                 <h2>Items to submit to the VCR</h2>
                 <form method="post" action="{{submitEndpoint}}">
                     <input type="hidden" name="name" value="{{name}}" />
@@ -29,8 +38,8 @@ HTML template for the queue component. See <https: //handlebarsjs.com>
                         </li>
                         {{/each}}
                     </ul>
-                    <input class="btn btn-primary" id="submitVcrQueue" type="submit" value="Submit" />
-                    <button class="btn btn-default" id="clearVcrQueue">Clear</button>
+                    <input type="submit" class="btn btn-primary submitVcrQueue" value="Submit" />
+                    <button type="button" class="btn btn-default clearVcrQueue">Clear</button>
                 </form>
             </div>
             <div class="minimized-content"></div>

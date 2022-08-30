@@ -25,6 +25,11 @@ export class VCRIntegrationEventHandler {
         self = this;
     }
 
+    handleOnSubmit() {
+        logger.debug('Setting submitted state to true');
+        self.vcrIntegration.setSubmittedState(true);
+    }
+
     handleClearQueueEvent() {
         logger.debug('Handling clear queue event');
         self.vcrIntegration.clearQueue();

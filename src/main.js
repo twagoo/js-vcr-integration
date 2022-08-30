@@ -51,16 +51,27 @@ global.initVcrIntegration = initPlugin;
 const registerEventHandlers = function (vcrIntegration) {
     const eventHandler = new VCRIntegrationEventHandler(vcrIntegration);
 
-    $("body").on("click", "#queue-component #clearVcrQueue", $.proxy(eventHandler.handleClearQueueEvent, eventHandler));
+    // Queue component events:
+    // - Queue is submitted (as form)
+    $("body").on("submit", "#queue-component form", $.proxy(eventHandler.handleOnSubmit, eventHandler));
+    // - Clear button is clicked
+    $("body").on("click", "#queue-component .clearVcrQueue", $.proxy(eventHandler.handleClearQueueEvent, eventHandler));
+    // - Single item is removed
     $("body").on("click", "#queue-component li[data-vcr-url] a.removeFromVcrQueue", $.proxy(eventHandler.handleRemoveFromQueueEvent, eventHandler));
+    // - Hide/show action
     $("body").on("click", "#queue-component .component-control-hide-toggle", $.proxy(eventHandler.handleVcrQueueMinimizedToggle, eventHandler));
-    $("body").on("click", "#queue-component .alert .close", $.proxy(eventHandler.handleCloseWarning, eventHandler));
+    // - Help button clicked
     $("body").on("click", "#queue-component .component-control-help", $.proxy(eventHandler.handleShowHelp, eventHandler));
+    // - Alert/message is dismissed
+    $("body").on("click", "#queue-component .alert .close", $.proxy(eventHandler.handleCloseWarning, eventHandler));
+
+    // Modal dialogue events:
+    // - Dialogue is dismissed
     $("body").on("click", '.vcr-modal button[data-dismiss="modal"]', (evt) => {
         $(evt.currentTarget).parents('.vcr-modal').detach();
     });
 
-    // if auto registration of handlers enabled
+    // If auto registration of handlers enabled
     if ($("a[data-vcr-url]").length > 0) {
         logger.debug("Found one or more VCR queue item controls: " + $("a[data-vcr-url]").length);
 

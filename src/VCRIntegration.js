@@ -32,12 +32,13 @@ import { QUEUE_CONTROL_MINIMIZED_CLASS } from './Constants.js';
 
 const global = this || window;
 
-const renderQueueView = function (queue, config = {}, collectionMetadata = {}) {
+const renderQueueView = function (queue, submittedState, config = {}, collectionMetadata = {}) {
     let values = {
+        items: queue,
+        submitted: submittedState,
         config: config,
         submitEndpoint: config[cfp.SETTING_ENDPOINT_URL],
         name: collectionMetadata.name || config[cfp.SETTING_DEFAULT_NAME],
-        items: queue,
         position: config[cfp.SETTING_QUEUE_CONTROL_POSITION],
         icons: config[cfp.SETTING_ICONS] || icons,
         customClass: config[cfp.SETTING_CUSTOM_QUEUE_COMPONENT_CLASS] || ""
@@ -84,6 +85,10 @@ export class VCRIntegration {
         if (queue) {
             return JSON.parse(queue);
         } else {
+            // create new queue
+            // first make sure that submitted state is reset
+            this.setSubmittedState(false);
+            // empty queue, save to storage
             return this.saveQueue([]);
         }
     }
@@ -95,7 +100,7 @@ export class VCRIntegration {
      */
     saveQueue(queue) {
         logger.debug('Saving queue: ', queue);
-        window.localStorage.setItem('vcrQueue', JSON.stringify(queue));
+        this.storage.setItem('vcrQueue', JSON.stringify(queue));
         return queue;
     }
 
@@ -105,11 +110,26 @@ export class VCRIntegration {
      */
     clearQueue() {
         logger.debug('Clearing queue: ', this.getQueue());
-        window.localStorage.removeItem('vcrQueue');
+        this.storage.removeItem('vcrQueue');
         logger.info('Queue cleared');
+
+        // reset submitted state
+        this.setSubmittedState(false);
 
         // any links to add items to the queue need to get re-enabled
         this.updatedAddLinkEnabledState(true);
+    }
+
+    setSubmittedState(state) {
+        if(state){
+            this.storage.setItem('submitted', state);
+        } else {
+            this.storage.removeItem('submitted');
+        }
+    }
+
+    getSubmittedState() {
+        return this.storage.getItem('submitted');
     }
 
     /**
@@ -145,6 +165,10 @@ export class VCRIntegration {
                 queue.splice(index, 1);
 
                 this.saveQueue(queue);
+
+                // queue altered: reset submitted state
+                this.setSubmittedState(false);
+                
                 logger.info('Removed from queue');
 
                 // any links to add this item to the queue needs to get re-enabled
@@ -174,6 +198,10 @@ export class VCRIntegration {
             } else {
                 queue.push({ 'url': url, 'title': title });
                 this.saveQueue(queue);
+
+                // queue altered: reset submitted state
+                this.setSubmittedState(false);
+
                 logger.info('Added to queue');
                 logger.debug('New queue: ', this.getQueue());
                 this.renderQueue();
@@ -225,7 +253,7 @@ export class VCRIntegration {
         // if there are items, render the queue component
         const queue = this.getQueue();
         if (queue && queue.length > 0) {
-            $("body").append(renderQueueView(queue, this.config));
+            $("body").append(renderQueueView(queue, this.getSubmittedState(), this.config));
             if (classAttrVal) {
                 getQueueControlObject().attr('class', classAttrVal);
             }
