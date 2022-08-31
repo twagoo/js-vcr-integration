@@ -19,35 +19,61 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : CLARIN ERIC <clarin@clarin.eu>
 */
 
+$screen-sm: 768px;
+
 #queue-component {
     position: fixed;
-    z-index: 2000000; 
+    z-index: 2000000;
+
+    // desktop & tablet
     margin: 10px;
-    
-    &, &.bottom-right {
-        bottom: 0px; right: 0px;
-        top: unset; left: unset;
-    }
-
-    &.top-right {
-        top: 0px; right: 0px;
-        bottom: unset; left: unset;
-    }
-
-    &.bottom-left {
-        bottom: 0px; left: 0px;        
-        top: unset; right: unset;
-    }
-
-    &.top-left {
-        top: 0px; left: 0px;
-        bottom: unset; right: unset;
-    }
-
-    min-width: 30em; 
+    min-width: 30em;
     max-width: 50em;
 
+    @media (max-width: $screen-sm) {
+        //smaller screens: stick to bottom, full width
+        width: 96%;
+        min-width: unset;
+        max-width: unset;
+
+        left: 2%;
+        bottom: 2px;
+        margin: 0;
+    }
+
     padding: 0;
+
+    @media (min-width: $screen-sm) {
+
+        &,
+        &.bottom-right {
+            bottom: 0px;
+            right: 0px;
+            top: unset;
+            left: unset;
+        }
+
+        &.top-right {
+            top: 0px;
+            right: 0px;
+            bottom: unset;
+            left: unset;
+        }
+
+        &.bottom-left {
+            bottom: 0px;
+            left: 0px;
+            top: unset;
+            right: unset;
+        }
+
+        &.top-left {
+            top: 0px;
+            left: 0px;
+            bottom: unset;
+            right: unset;
+        }
+    }
 
     background: #fff;
     border: 1px solid #000;
@@ -75,21 +101,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         .component-control {
 
             .component-control-hide-toggle {
-                &.do-hide { display: none; }
-                &.do-show { display: unset; }
+                &.do-hide {
+                    display: none;
+                }
+
+                &.do-show {
+                    display: unset;
+                }
             }
         }
     }
 
-    .component-control
-    {
+    .component-control {
         padding: 5px;
         margin: 0;
         background: #eee;
 
         .component-control-hide-toggle {
+
             //non-minimized
-            &.do-show { display: none; }
+            &.do-show {
+                display: none;
+            }
         }
 
         .component-control-help {
@@ -103,4 +136,10 @@ ul.queue-items {
     margin: 0 1em 1em .5em;
     max-height: 10em;
     overflow-y: auto;
+
+    @media (max-width: $screen-sm) {
+        //smaller screens
+        max-height: 3em;
+        margin: 0 .5em .5em 0;
+    }
 }
