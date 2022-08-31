@@ -32,7 +32,7 @@ import { QUEUE_CONTROL_MINIMIZED_CLASS } from './Constants.js';
 
 const global = this || window;
 
-const renderQueueView = function (queue, submittedState, config = {}, collectionMetadata = {}) {
+const renderQueueView = function (queue, submittedState, minimizedState, config = {}, collectionMetadata = {}) {
     let values = {
         items: queue,
         submitted: submittedState,
@@ -41,7 +41,8 @@ const renderQueueView = function (queue, submittedState, config = {}, collection
         name: collectionMetadata.name || config[cfp.SETTING_DEFAULT_NAME],
         position: config[cfp.SETTING_QUEUE_CONTROL_POSITION],
         icons: config[cfp.SETTING_ICONS] || icons,
-        customClass: config[cfp.SETTING_CUSTOM_QUEUE_COMPONENT_CLASS] || ""
+        customClass: config[cfp.SETTING_CUSTOM_QUEUE_COMPONENT_CLASS] || "",
+        minimizedClass: minimizedState ? QUEUE_CONTROL_MINIMIZED_CLASS : ""
     };
 
     logger.debug('Rendering queue with', values);
@@ -68,8 +69,8 @@ export class VCRIntegration {
             this.storage = storage;
         } else {
             if (global && global.localStorage) {
-                logger.info('Using local storage provided by global context');
                 this.storage = global.localStorage;
+                logger.debug('Using local storage provided by global context:', this.storage);
             } else {
                 logger.error('No localstorage on global object and no explicit storage passed to constructor');
             }
@@ -116,20 +117,11 @@ export class VCRIntegration {
         // reset submitted state
         this.setSubmittedState(false);
 
+        // reset minimized state
+        this.setMinimizedState(false);
+
         // any links to add items to the queue need to get re-enabled
         this.updatedAddLinkEnabledState(true);
-    }
-
-    setSubmittedState(state) {
-        if(state){
-            this.storage.setItem('submitted', state);
-        } else {
-            this.storage.removeItem('submitted');
-        }
-    }
-
-    getSubmittedState() {
-        return this.storage.getItem('submitted');
     }
 
     /**
@@ -168,7 +160,7 @@ export class VCRIntegration {
 
                 // queue altered: reset submitted state
                 this.setSubmittedState(false);
-                
+
                 logger.info('Removed from queue');
 
                 // any links to add this item to the queue needs to get re-enabled
@@ -253,7 +245,7 @@ export class VCRIntegration {
         // if there are items, render the queue component
         const queue = this.getQueue();
         if (queue && queue.length > 0) {
-            $("body").append(renderQueueView(queue, this.getSubmittedState(), this.config));
+            $("body").append(renderQueueView(queue, this.getSubmittedState(), this.getMinimizedState(), this.config));
             if (classAttrVal) {
                 getQueueControlObject().attr('class', classAttrVal);
             }
@@ -270,11 +262,15 @@ export class VCRIntegration {
      * @returns {Boolean} whether the component was minimized
      */
     hideQueueControl() {
+        this.setMinimizedState(true);
+
+        // add minimized class
         let component = getQueueControlObject();
         if (component.hasClass(QUEUE_CONTROL_MINIMIZED_CLASS)) {
             return false;
         } else {
             getQueueControlObject().addClass(QUEUE_CONTROL_MINIMIZED_CLASS);
+            logger.debug('Component has been minimized');
             return true;
         }
     }
@@ -284,11 +280,15 @@ export class VCRIntegration {
      * @returns {Boolean} whether the component was de-minimized
      */
     showQueueControl() {
+        this.setMinimizedState(false);
+
+        // remove minimized class
         let component = getQueueControlObject();
         if (component.hasClass(QUEUE_CONTROL_MINIMIZED_CLASS)) {
             getQueueControlObject().removeClass(QUEUE_CONTROL_MINIMIZED_CLASS);
             return true;
         } else {
+            logger.debug('Component has been de-minimized');
             return false;
         }
     }
@@ -299,11 +299,12 @@ export class VCRIntegration {
      */
     toggleQueueControl() {
         let component = getQueueControlObject();
-        if (component.hasClass(QUEUE_CONTROL_MINIMIZED_CLASS)) {
-            getQueueControlObject().removeClass(QUEUE_CONTROL_MINIMIZED_CLASS);
+        if (this.getMinimizedState() || component.hasClass(QUEUE_CONTROL_MINIMIZED_CLASS)) {
+            this.showQueueControl();
         } else {
-            getQueueControlObject().addClass(QUEUE_CONTROL_MINIMIZED_CLASS);
+            this.hideQueueControl();
         }
+        logger.debug('Component minimized state has been toggled');
     }
 
     /**
@@ -337,10 +338,13 @@ export class VCRIntegration {
      */
     updatedAddLinkEnabledState(onlyIfConfigAllows = false) {
         if (!onlyIfConfigAllows || this.config[cfp.SETTING_AUTO_DISABLE_ADDED_ITEM_LINKS]) {
+            logger.debug('Updating the state of all "add to VCR" links');
             $('a[data-vcr-url]').removeAttr('disabled');
             this.getQueue().forEach((item) => {
                 $('a[data-vcr-url="' + item['url'] + '"]').attr('disabled', 'disabled');
             });
+        } else {
+            logger.debug('NOT updating state of "add to VCR" links');
         }
     }
 
@@ -394,6 +398,40 @@ export class VCRIntegration {
             logger.info('Setting log level to ', logLevel);
             this.setLogLevel(logLevel);
         }
+    }
+
+    /**
+     * Set current submitted state
+     * @param {boolean} state 
+     */
+    setSubmittedState(state) {
+        logger.debug('Setting submitted state:', state);
+        if (state) {
+            this.storage.setItem('submitted', state);
+        } else {
+            this.storage.removeItem('submitted');
+        }
+    }
+
+    getSubmittedState() {
+        return this.storage.getItem('submitted');
+    }
+
+    /**
+     * Set current minimized state
+     * @param {boolean} state 
+     */
+    setMinimizedState(state) {
+        logger.debug('Setting minimized state:', state);
+        if (state) {
+            this.storage.setItem('minimized', state);
+        } else {
+            this.storage.removeItem('minimized');
+        }
+    }
+
+    getMinimizedState() {
+        return this.storage.getItem('minimized');
     }
 }
 
