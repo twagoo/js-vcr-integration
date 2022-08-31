@@ -17,3 +17,5 @@
 
 
 export const QUEUE_CONTROL_MINIMIZED_CLASS = 'minimized';
+export const STORED_STATED_KEY_MINIMIZED = 'minimized';
+export const STORED_STATED_KEY_SUBMITTED = 'submitted';

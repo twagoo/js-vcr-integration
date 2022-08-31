@@ -28,7 +28,7 @@ import "./style/queue.scss";
 // configuration properties
 import { configProperties as cfp } from './Configuration.js';
 // shared constants
-import { QUEUE_CONTROL_MINIMIZED_CLASS } from './Constants.js';
+import { QUEUE_CONTROL_MINIMIZED_CLASS, STORED_STATED_KEY_MINIMIZED, STORED_STATED_KEY_SUBMITTED } from './Constants.js';
 
 const global = this || window;
 
@@ -407,14 +407,14 @@ export class VCRIntegration {
     setSubmittedState(state) {
         logger.debug('Setting submitted state:', state);
         if (state) {
-            this.storage.setItem('submitted', state);
+            this.storage.setItem(STORED_STATED_KEY_SUBMITTED, state);
         } else {
-            this.storage.removeItem('submitted');
+            this.storage.removeItem(STORED_STATED_KEY_SUBMITTED);
         }
     }
 
     getSubmittedState() {
-        return this.storage.getItem('submitted');
+        return this.storage.getItem(STORED_STATED_KEY_SUBMITTED);
     }
 
     /**
@@ -424,14 +424,14 @@ export class VCRIntegration {
     setMinimizedState(state) {
         logger.debug('Setting minimized state:', state);
         if (state) {
-            this.storage.setItem('minimized', state);
+            this.storage.setItem(STORED_STATED_KEY_MINIMIZED, state);
         } else {
-            this.storage.removeItem('minimized');
+            this.storage.removeItem(STORED_STATED_KEY_MINIMIZED);
         }
     }
 
     getMinimizedState() {
-        return this.storage.getItem('minimized');
+        return this.storage.getItem(STORED_STATED_KEY_MINIMIZED);
     }
 }
 
