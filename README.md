@@ -1,3 +1,6 @@
+![Build and test workflow](https://github.com/clarin-eric/js-vcr-integration/actions/workflows/webpack.yml/badge.svg?branch=main)
+![Documentation](https://github.com/clarin-eric/js-vcr-integration/actions/workflows/pages/pages-build-deployment/badge.svg?branch=main)
+
 # Javascript library for Virtual Collection Registry integrations
 
 Main features:
