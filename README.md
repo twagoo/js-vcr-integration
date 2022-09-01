@@ -1,11 +1,13 @@
+# Javascript library for Virtual Collection Registry integrations
+
+Widget and API for easy integration with the [Virtual Collection Registry](https://collections.clarin.eu) (VCR)
+
 ![Build and test workflow](https://github.com/clarin-eric/js-vcr-integration/actions/workflows/webpack.yml/badge.svg?branch=main)
 ![Documentation](https://github.com/clarin-eric/js-vcr-integration/actions/workflows/pages/pages-build-deployment/badge.svg?branch=main)
 
-# Javascript library for Virtual Collection Registry integrations
+## Main features
 
-Main features:
-* Queueing of items (with URL/PID, title and description) for submission to the
-[Virtual Collection Registry](https://collections.clarin.eu) (VCR).
+* Queueing of items (with URL/PID, title and description) for submission to the VCR
 * Submission queue component with listing and submit, clear, hide/show controls
 * Declarative integration (no custom JS code required)
 * Optional programmatic control of queue and queue component
