@@ -31,5 +31,5 @@ fi
 
 
 (cd "${SCRIPT_DIR}" \
-    && ([ "${RUN_TESTS}" != 'true' ] || npm run test) \
+    && ([ "${RUN_TESTS}" != 'true' ] || npm run test || (echo 'ONE OR MORE TESTS FAILED - will not continue build' && exit 1)) \
     && npm run "${NPM_SCRIPT}")
