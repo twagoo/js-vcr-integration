@@ -22,16 +22,33 @@ import _mapValues from 'lodash/mapValues';
 
 import logger from 'loglevel';
 
+const DEFAULT_MAX_ITEM_COUNT = 100;
+const DEFAULT_ENDPOINT_URL = "https://collections.clarin.eu/submit/extensional";
+const DEFAULT_DEFAULT_NAME = "No name";
+const DEFAULT_QUEUE_CONTROL_POSITION = "bottom-right";
+const DEFAULT_LOGLEVEL = "info";
+const DEFAULT_AUTO_INIT = true;
+const DEFAULT_AUTO_DISABLE_ADDED_ITEM_LINKS = true;
+
 const configDefinitions = {
-    "SETTING_LOGLEVEL": ["logLevel", "info"],
-    "SETTING_QUEUE_CONTROL_POSITION": ["queueControlPosition", "bottom-right"],
-    "SETTING_ICONS": "icons",
-    "SETTING_ENDPOINT_URL": ["endpointUrl", "https://collections.clarin.eu/submit/extensional"],
-    "SETTING_DEFAULT_NAME": ["defaultName", "No name"],
-    "SETTING_AUTO_INIT": ["autoInitialize", true],
-    "SETTING_MAX_ITEM_COUNT": ["maxItemCount", 100],
+    // initial log level
+    "SETTING_LOGLEVEL": ["logLevel", DEFAULT_LOGLEVEL],
+    // URL to submit queue to
+    "SETTING_ENDPOINT_URL": ["endpointUrl", DEFAULT_ENDPOINT_URL],
+    // position of queue control on page ('top-right', 'bottom-right', 'bottom-left' or 'top-left')
+    "SETTING_QUEUE_CONTROL_POSITION": ["queueControlPosition", DEFAULT_QUEUE_CONTROL_POSITION],
+    // whether to automatically initialize
+    "SETTING_AUTO_INIT": ["autoInitialize", DEFAULT_AUTO_INIT],
+    // maximum number of items allowed in the queue
+    "SETTING_MAX_ITEM_COUNT": ["maxItemCount", DEFAULT_MAX_ITEM_COUNT],
+    // whether to automatically enable/disable 'add to queue' links
+    "SETTING_AUTO_DISABLE_ADDED_ITEM_LINKS": ["autoDisableAddedItemLinks", DEFAULT_AUTO_DISABLE_ADDED_ITEM_LINKS],
+    // default collection name
+    "SETTING_DEFAULT_NAME": ["defaultName", DEFAULT_DEFAULT_NAME],
+    // for an additional CSS class on the queue component (no default)
     "SETTING_CUSTOM_QUEUE_COMPONENT_CLASS": "customQueueComponentClass",
-    "SETTING_AUTO_DISABLE_ADDED_ITEM_LINKS": ["autoDisableAddedItemLinks", true]
+    // for custom icons (no default)
+    "SETTING_ICONS": "icons"
 };
 
 export const configProperties = _mapValues(configDefinitions, (value) => {
