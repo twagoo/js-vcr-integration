@@ -186,6 +186,7 @@ export class VCRIntegration {
             const queue = this.getQueue();
             if (queue.length >= this.config[cfp.SETTING_MAX_ITEM_COUNT]) {
                 logger.warn("Cannot add item, maximum number of items in queue reached or exceeded (", this.config[cfp.SETTING_MAX_ITEM_COUNT], ")")
+                this.showQueueControl();
                 this.setErrorMessage("Queue is full, cannot add more items");
             } else {
                 queue.push({ 'url': url, 'title': title });
@@ -200,6 +201,11 @@ export class VCRIntegration {
 
                 // links adding this item to the queue should get disabled
                 this.updatedAddLinkEnabledState(true);
+
+                if(this.getMinimizedState()) {
+                    // flash component
+                    $("#queue-component").fadeOut(50).fadeIn(250);
+                }
             }
         }
     }
