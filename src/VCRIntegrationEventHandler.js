@@ -52,12 +52,13 @@ export class VCRIntegrationEventHandler {
     }
 
     handleAddToQueueEvent(event) {
+        event.preventDefault();
+
         logger.debug('Handling add to queue event');
         const url = $(event.currentTarget).attr('data-vcr-url');
         const title = $(event.currentTarget).attr('data-vcr-title');
         if (url) {
             self.vcrIntegration.addToQueue(url, title);
-            // TODO: disable buttons of items that are already in queue
         } else {
             logger.warn('Cannot add to queue, no URL on context: ', $(event.currentTarget));
         }
