@@ -24,6 +24,7 @@ import { VCRIntegration } from './../VCRIntegration.js';
 import { defaultConfig, configProperties as cfp } from '../Configuration.js';
 
 var config;
+var vcrIntegration;
 
 beforeAll(() => {
     Element.prototype.scrollIntoView = jest.fn();
@@ -32,22 +33,21 @@ beforeAll(() => {
 beforeEach(() => {
     window.localStorage.clear();
     config = _cloneDeep(defaultConfig);
+    vcrIntegration = new VCRIntegration(config);
+    vcrIntegration.setLogLevel('error');
 });
 
 test('Start with empty queue', () => {
-    const vcrIntegration = new VCRIntegration(config);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
 });
 
 test('Adding item', () => {
-    const vcrIntegration = new VCRIntegration(config);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
     expect(vcrIntegration.getQueue()).toHaveLength(1);
 });
 
 test('Adding same item twice, should only end up in queue once', () => {
-    const vcrIntegration = new VCRIntegration(config);
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
     expect(vcrIntegration.getQueue()).toHaveLength(1);
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
@@ -56,7 +56,6 @@ test('Adding same item twice, should only end up in queue once', () => {
 
 
 test('Adding multiple items at once', () => {
-    const vcrIntegration = new VCRIntegration(config);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     vcrIntegration.addAllToQueue([{ url: 'https://wwww.clarin.eu/1', title: 'test1' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(1);
@@ -80,7 +79,6 @@ test('Adding multiple items at once', () => {
 });
 
 test('Removing items', () => {
-    const vcrIntegration = new VCRIntegration(config);
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
     vcrIntegration.addToQueue('https://wwww.clarin.eu/2', 'test2');
     vcrIntegration.addToQueue('https://wwww.clarin.eu/3', 'test3');
@@ -98,8 +96,7 @@ test('Removing items', () => {
 test('Adding item beyond limit', () => {
     // set item limit to 1
     config[cfp.SETTING_MAX_ITEM_COUNT] = 1;
-    
-    const vcrIntegration = new VCRIntegration(config);
+
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     // first item should be accepted
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
@@ -116,8 +113,7 @@ test('Adding item beyond limit', () => {
 test('Adding multiple beyond limit', () => {
     // set item limit to 1
     config[cfp.SETTING_MAX_ITEM_COUNT] = 1;
-    
-    const vcrIntegration = new VCRIntegration(config);
+
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     // all items should be refused
     vcrIntegration.addAllToQueue([

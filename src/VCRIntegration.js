@@ -363,7 +363,7 @@ export class VCRIntegration {
 
     /**
      * Sets the current log level
-     * @param {String} level log level ('debug', 'info' or 'warn')
+     * @param {String} level log level ('debug', 'info', 'warn' or 'error')
      * @returns {None}
      */
     setLogLevel(level) {
