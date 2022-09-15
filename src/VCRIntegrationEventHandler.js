@@ -31,6 +31,8 @@ export class VCRIntegrationEventHandler {
     }
 
     handleClearQueueEvent() {
+        event.preventDefault();
+
         logger.debug('Handling clear queue event');
         self.vcrIntegration.clearQueue();
         logger.debug('Re-rendering for cleared queue');
@@ -38,6 +40,8 @@ export class VCRIntegrationEventHandler {
     }
 
     handleRemoveFromQueueEvent(event) {
+        event.preventDefault();
+
         logger.debug('Handling remove from queue event');
         const url = $(event.currentTarget).parent().attr('data-vcr-url');
         if (url) {
@@ -53,8 +57,8 @@ export class VCRIntegrationEventHandler {
 
     handleAddToQueueEvent(event) {
         event.preventDefault();
-
         logger.debug('Handling add to queue event');
+
         const url = $(event.currentTarget).attr('data-vcr-url');
         const title = $(event.currentTarget).attr('data-vcr-title');
         if (url) {
@@ -65,15 +69,23 @@ export class VCRIntegrationEventHandler {
     }
 
     handleVcrQueueMinimizedToggle(event) {
+        event.preventDefault();
         logger.debug('Handling toggling queue component minimized state event');
+
         self.vcrIntegration.toggleQueueControl();
     }
 
     handleCloseWarning(event) {
+        event.preventDefault();
+        logger.debug('Handling close warning event');
+
         self.vcrIntegration.clearErrorMessage($(event.currentTarget).parent());
     }
 
-    handleShowHelp() {
+    handleShowHelp(event) {
+        event.preventDefault();
+        logger.debug('Handling show help event');
+
         self.vcrIntegration.showHelp();
     }
 }
