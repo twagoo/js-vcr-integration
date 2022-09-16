@@ -26,7 +26,7 @@ HTML template for the queue component. See <https: //handlebarsjs.com>
                 {{/if}}
                 
                 <h2>Items to submit to the VCR</h2>
-                <form method="post" action="{{submitEndpoint}}">
+                <form target="_blank" method="post" action="{{submitEndpoint}}">
                     <input type="hidden" name="name" value="{{name}}" />
                     <ul class="queue-items">
                         {{#each items}}
