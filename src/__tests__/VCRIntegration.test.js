@@ -57,24 +57,24 @@ test('Adding same item twice, should only end up in queue once', () => {
 
 test('Adding multiple items at once', () => {
     expect(vcrIntegration.getQueue()).toHaveLength(0);
-    vcrIntegration.addAllToQueue([{ url: 'https://wwww.clarin.eu/1', title: 'test1' }]);
+    vcrIntegration.addAllToQueue([{ uri: 'https://wwww.clarin.eu/1', label: 'test1' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(1);
-    expect(vcrIntegration.getQueue()).toContainEqual({ url: 'https://wwww.clarin.eu/1', title: 'test1' });
+    expect(vcrIntegration.getQueue()).toContainEqual({ uri: 'https://wwww.clarin.eu/1', label: 'test1' });
     // add multiple
     vcrIntegration.addAllToQueue([
-        { url: 'https://wwww.clarin.eu/2', title: 'test2' },
-        { url: 'https://wwww.clarin.eu/3', title: 'test3' }]);
+        { uri: 'https://wwww.clarin.eu/2', label: 'test2' },
+        { uri: 'https://wwww.clarin.eu/3', label: 'test3' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(3);
-    expect(vcrIntegration.getQueue()).toContainEqual({ url: 'https://wwww.clarin.eu/1', title: 'test1' });
+    expect(vcrIntegration.getQueue()).toContainEqual({ uri: 'https://wwww.clarin.eu/1', label: 'test1' });
     // add existing
     vcrIntegration.addAllToQueue([
-        { url: 'https://wwww.clarin.eu/1', title: 'test2' },
-        { url: 'https://wwww.clarin.eu/2', title: 'test3' }]);
+        { uri: 'https://wwww.clarin.eu/1', label: 'test2' },
+        { uri: 'https://wwww.clarin.eu/2', label: 'test3' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(3); // same as before
     // add broken
     vcrIntegration.addAllToQueue([
-        { foo: 'https://wwww.clarin.eu/4', title: 'test4' },
-        { url: 'https://wwww.clarin.eu/5', bar: 'test5' }]);
+        { foo: 'https://wwww.clarin.eu/4', label: 'test4' },
+        { uri: 'https://wwww.clarin.eu/5', bar: 'test5' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(3); // same as before
 });
 
@@ -105,8 +105,8 @@ test('Adding item beyond limit', () => {
     vcrIntegration.addToQueue('https://wwww.clarin.eu/2', 'test2');
     expect(vcrIntegration.getQueue()).toHaveLength(1);
     vcrIntegration.addAllToQueue([
-        { url: 'https://wwww.clarin.eu/3', title: 'test3' },
-        { url: 'https://wwww.clarin.eu/4', title: 'test4' }]);
+        { uri: 'https://wwww.clarin.eu/3', label: 'test3' },
+        { uri: 'https://wwww.clarin.eu/4', label: 'test4' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(1);
 });
 
@@ -117,7 +117,7 @@ test('Adding multiple beyond limit', () => {
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     // all items should be refused
     vcrIntegration.addAllToQueue([
-        { url: 'https://wwww.clarin.eu/1', title: 'test1' },
-        { url: 'https://wwww.clarin.eu/2', title: 'test2' }]);
+        { uri: 'https://wwww.clarin.eu/1', label: 'test1' },
+        { uri: 'https://wwww.clarin.eu/2', label: 'test2' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(0);
 });

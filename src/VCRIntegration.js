@@ -115,7 +115,7 @@ export class VCRIntegration {
     getItemIndex(url) {
         const queue = this.getQueue();
         for (let i = 0; i < queue.length; i++) {
-            if (queue[i]['url'] === url) {
+            if (queue[i]['uri'] === url) {
                 return i;
             }
         }
@@ -158,12 +158,12 @@ export class VCRIntegration {
 
     /**
      * Adds a single item to the queue
-     * @param {String} url URL of item
-     * @param {String} title Title for item
+     * @param {String} uri URI of item
+     * @param {String} label Label or title for item
      * @returns {None}
      */
-    addToQueue(url, title) {
-        if (this.getItemIndex(url) >= 0) {
+    addToQueue(uri, label) {
+        if (this.getItemIndex(uri) >= 0) {
             logger.info('URL already in queue, not adding again');
         } else {
             const queue = this.getQueue();
@@ -172,7 +172,7 @@ export class VCRIntegration {
                 this.showQueueControl();
                 this.setErrorMessage("Queue is full, cannot add more items");
             } else {
-                queue.push({ 'url': url, 'title': title });
+                queue.push({ 'uri': uri, 'label': label });
                 this.saveQueue(queue);
 
                 // queue altered: reset submitted state
@@ -195,7 +195,7 @@ export class VCRIntegration {
 
     /**
      * Adds zero or more items to the queue
-     * @param {Array} items Array of objects with 'url' and 'title' options
+     * @param {Array} items Array of objects with 'uri' and 'label' keys
      */
     addAllToQueue(items) {
         if (items.length == 0) {
@@ -207,8 +207,8 @@ export class VCRIntegration {
                 this.setErrorMessage("Cannot add items, queue length reached");
             } else {
                 items.forEach(item => {
-                    if (item.hasOwnProperty('url') && item.hasOwnProperty('title')) {
-                        this.addToQueue(item.url, item.title);
+                    if (item.hasOwnProperty('uri') && item.hasOwnProperty('label')) {
+                        this.addToQueue(item.uri, item.label);
                     } else {
                         logger.warn('Skipping item: does not contain url and/or title', item);
                     }
@@ -330,7 +330,7 @@ export class VCRIntegration {
             logger.debug('Updating the state of all "add to VCR" links');
             $('a[data-vcr-url]').removeAttr('disabled');
             this.getQueue().forEach((item) => {
-                $('a[data-vcr-url="' + item['url'] + '"]').attr('disabled', 'disabled');
+                $('a[data-vcr-url="' + item['uri'] + '"]').attr('disabled', 'disabled');
             });
         } else {
             logger.debug('NOT updating state of "add to VCR" links');

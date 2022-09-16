@@ -20,8 +20,5 @@
  * @returns value for the 'resourceUri' field for a collection itme
  */
 module.exports = function () {
-    return JSON.stringify({
-        "uri": this.url,
-        "label": this.title
-    });
+    return JSON.stringify(this);
 };
