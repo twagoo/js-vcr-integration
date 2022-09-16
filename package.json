@@ -1,6 +1,6 @@
 {
     "name": "vcr-integration",
-    "version": "1.0.0-alpha2",
+    "version": "1.0.0-alpha3",
     "description": "",
     "main": "vcr-plugin.js",
     "scripts": {
