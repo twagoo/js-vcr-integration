@@ -23,5 +23,5 @@ module.exports = function () {
     return JSON.stringify({
         "uri": this.url,
         "label": this.title
-    }).replaceAll('"', '&quot;');
+    });
 };
