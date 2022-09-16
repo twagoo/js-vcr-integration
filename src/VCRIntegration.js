@@ -208,9 +208,9 @@ export class VCRIntegration {
             } else {
                 items.forEach(item => {
                     if (item.hasOwnProperty('uri') && item.hasOwnProperty('label')) {
-                        this.addToQueue(item.uri, item.label);
+                        this.addToQueue(item.uri, item.label, item.description);
                     } else {
-                        logger.warn('Skipping item: does not contain url and/or title', item);
+                        logger.warn('Skipping item: does not contain uri and/or label', item);
                     }
                 });
             }

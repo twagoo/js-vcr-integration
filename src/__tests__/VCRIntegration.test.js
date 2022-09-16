@@ -71,15 +71,17 @@ test('Adding same item twice, should only end up in queue once', () => {
 
 test('Adding multiple items at once', () => {
     expect(vcrIntegration.getQueue()).toHaveLength(0);
-    vcrIntegration.addAllToQueue([{ uri: 'https://wwww.clarin.eu/1', label: 'test1' }]);
+    vcrIntegration.addAllToQueue([{ uri: 'https://wwww.clarin.eu/1', label: 'test1', description: 'test description 1' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(1);
-    expect(vcrIntegration.getQueue()).toContainEqual({ uri: 'https://wwww.clarin.eu/1', label: 'test1' });
+    expect(vcrIntegration.getQueue()).toContainEqual({ uri: 'https://wwww.clarin.eu/1', label: 'test1', description: 'test description 1' });
     // add multiple
     vcrIntegration.addAllToQueue([
         { uri: 'https://wwww.clarin.eu/2', label: 'test2' },
         { uri: 'https://wwww.clarin.eu/3', label: 'test3' }]);
     expect(vcrIntegration.getQueue()).toHaveLength(3);
-    expect(vcrIntegration.getQueue()).toContainEqual({ uri: 'https://wwww.clarin.eu/1', label: 'test1' });
+    expect(vcrIntegration.getQueue()).toContainEqual({ uri: 'https://wwww.clarin.eu/1', label: 'test1', description: 'test description 1' });
+    expect(vcrIntegration.getQueue()).toContainEqual({ uri: 'https://wwww.clarin.eu/2', label: 'test2' });
+    expect(vcrIntegration.getQueue()).toContainEqual({ uri: 'https://wwww.clarin.eu/3', label: 'test3' });
     // add existing
     vcrIntegration.addAllToQueue([
         { uri: 'https://wwww.clarin.eu/1', label: 'test2' },
