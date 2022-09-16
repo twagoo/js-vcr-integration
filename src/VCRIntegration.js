@@ -32,26 +32,9 @@ import { QUEUE_CONTROL_MINIMIZED_CLASS, STORED_STATED_KEY_MINIMIZED, STORED_STAT
 
 const global = this || window;
 
-const renderQueueView = function (queue, submittedState, minimizedState, config = {}, collectionMetadata = {}) {
-    let values = {
-        items: queue,
-        submitted: submittedState,
-        config: config,
-        submitEndpoint: config[cfp.SETTING_ENDPOINT_URL],
-        name: collectionMetadata.name || config[cfp.SETTING_DEFAULT_NAME],
-        position: config[cfp.SETTING_QUEUE_CONTROL_POSITION],
-        icons: config[cfp.SETTING_ICONS] || icons,
-        customClass: config[cfp.SETTING_CUSTOM_QUEUE_COMPONENT_CLASS] || "",
-        minimizedClass: minimizedState ? QUEUE_CONTROL_MINIMIZED_CLASS : ""
-    };
-
-    logger.debug('Rendering queue with', values);
-    return queueComponentTemplate(values);
-};
-
 /**
- * VCR integration object
- * @type type
+ * VCR integration object; this is the main interface for browser/client interaction
+ * @type class 
  */
 export class VCRIntegration {
     /**
@@ -440,6 +423,32 @@ export class VCRIntegration {
         return this.storage.getItem(STORED_STATED_KEY_MINIMIZED);
     }
 }
+
+/**
+ * Renders the queue component into an HTML element
+ * @param {Object[]} queue 
+ * @param {boolean} submittedState 
+ * @param {boolean} minimizedState 
+ * @param {Object} config 
+ * @param {Object} collectionMetadata 
+ * @returns HTML for queue component
+ */
+ const renderQueueView = function (queue, submittedState, minimizedState, config = {}, collectionMetadata = {}) {
+    let values = {
+        items: queue,
+        submitted: submittedState,
+        config: config,
+        submitEndpoint: config[cfp.SETTING_ENDPOINT_URL],
+        name: collectionMetadata.name || config[cfp.SETTING_DEFAULT_NAME],
+        position: config[cfp.SETTING_QUEUE_CONTROL_POSITION],
+        icons: config[cfp.SETTING_ICONS] || icons,
+        customClass: config[cfp.SETTING_CUSTOM_QUEUE_COMPONENT_CLASS] || "",
+        minimizedClass: minimizedState ? QUEUE_CONTROL_MINIMIZED_CLASS : ""
+    };
+
+    logger.debug('Rendering queue with', values);
+    return queueComponentTemplate(values);
+};
 
 const getQueueControlObject = function () {
     return $("body #queue-component");
