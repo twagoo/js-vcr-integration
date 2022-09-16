@@ -23,12 +23,13 @@ Load the script in the `<head>` section of an HTML document:
 Define and annotate links for adding items to the queue:
 ```html
 Some resource
-    (<a  data-vcr-url="http://doi.org/10.5555/12345678" 
-    data-vcr-title="Some resource">Add to virtual collection</a>)
+    (<a  data-vcr-uri="http://doi.org/10.5555/12345678" 
+    data-vcr-label="Some resource">Add to virtual collection</a>)
 (...)
 Other resource 
-    (<a  data-vcr-url="https://tinyurl.com/my-resource" 
-    data-vcr-title="Some other resource">Add to virtual collection</a>)
+    (<a  data-vcr-uri="https://tinyurl.com/my-resource" 
+    data-vcr-label="Some other resource"
+    data-vcr-description="Optional description for the resource">Add to virtual collection</a>)
 ```
 
 That is it. If a user clicks one of the annotated links a queue component will appear, allowing the user to manage the

@@ -43,7 +43,7 @@ export class VCRIntegrationEventHandler {
         event.preventDefault();
 
         logger.debug('Handling remove from queue event');
-        const url = $(event.currentTarget).parent().attr('data-vcr-url');
+        const url = $(event.currentTarget).parent().attr('data-vcr-uri');
         if (url) {
             if (self.vcrIntegration.removeFromQueue(url)) {
                 self.vcrIntegration.renderQueue();
@@ -59,10 +59,11 @@ export class VCRIntegrationEventHandler {
         event.preventDefault();
         logger.debug('Handling add to queue event');
 
-        const url = $(event.currentTarget).attr('data-vcr-url');
-        const title = $(event.currentTarget).attr('data-vcr-title');
+        const url = $(event.currentTarget).attr('data-vcr-uri');
+        const title = $(event.currentTarget).attr('data-vcr-label');
+        const description = $(event.currentTarget).attr('data-vcr-description');
         if (url) {
-            self.vcrIntegration.addToQueue(url, title);
+            self.vcrIntegration.addToQueue(url, title, description);
         } else {
             logger.warn('Cannot add to queue, no URL on context: ', $(event.currentTarget));
         }

@@ -45,6 +45,20 @@ test('Adding item', () => {
     expect(vcrIntegration.getQueue()).toHaveLength(0);
     vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1');
     expect(vcrIntegration.getQueue()).toHaveLength(1);
+    const item = vcrIntegration.getQueue()[0];
+    expect(item).toHaveProperty('uri');
+    expect(item).toHaveProperty('label');
+    expect(item).not.toHaveProperty('description');
+});
+
+test('Adding item with description', () => {
+    expect(vcrIntegration.getQueue()).toHaveLength(0);
+    vcrIntegration.addToQueue('https://wwww.clarin.eu/1', 'test1', 'test description1');
+    expect(vcrIntegration.getQueue()).toHaveLength(1);
+    const item = vcrIntegration.getQueue()[0];
+    expect(item).toHaveProperty('uri');
+    expect(item).toHaveProperty('label');
+    expect(item).toHaveProperty('description');
 });
 
 test('Adding same item twice, should only end up in queue once', () => {

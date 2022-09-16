@@ -162,7 +162,7 @@ export class VCRIntegration {
      * @param {String} label Label or title for item
      * @returns {None}
      */
-    addToQueue(uri, label) {
+    addToQueue(uri, label, description) {
         if (this.getItemIndex(uri) >= 0) {
             logger.info('URL already in queue, not adding again');
         } else {
@@ -172,7 +172,7 @@ export class VCRIntegration {
                 this.showQueueControl();
                 this.setErrorMessage("Queue is full, cannot add more items");
             } else {
-                queue.push({ 'uri': uri, 'label': label });
+                queue.push({ 'uri': uri, 'label': label, 'description': description});
                 this.saveQueue(queue);
 
                 // queue altered: reset submitted state
@@ -328,9 +328,9 @@ export class VCRIntegration {
     updatedAddLinkEnabledState(onlyIfConfigAllows = false) {
         if (!onlyIfConfigAllows || this.config[cfp.SETTING_AUTO_DISABLE_ADDED_ITEM_LINKS]) {
             logger.debug('Updating the state of all "add to VCR" links');
-            $('a[data-vcr-url]').removeAttr('disabled');
+            $('a[data-vcr-uri]').removeAttr('disabled');
             this.getQueue().forEach((item) => {
-                $('a[data-vcr-url="' + item['uri'] + '"]').attr('disabled', 'disabled');
+                $('a[data-vcr-uri="' + item['uri'] + '"]').attr('disabled', 'disabled');
             });
         } else {
             logger.debug('NOT updating state of "add to VCR" links');

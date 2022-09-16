@@ -30,7 +30,7 @@ HTML template for the queue component. See <https: //handlebarsjs.com>
                     <input type="hidden" name="name" value="{{name}}" />
                     <ul class="queue-items">
                         {{#each items}}
-                        <li data-vcr-url="{{uri}}">
+                        <li data-vcr-uri="{{uri}}">
                             {{label}}
                             <a class="itemUrlLink" href="{{uri}}" title="Go to the linked resource">{{{../icons.itemUrlLink}}}</a>
                             <a class="removeFromVcrQueue text-danger" href="#" title="Remove from queue" role="button">{{{../icons.remove}}}</a>

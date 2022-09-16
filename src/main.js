@@ -57,7 +57,7 @@ const registerEventHandlers = function (vcrIntegration) {
     // - Clear button is clicked
     $("body").on("click", "#queue-component .clearVcrQueue", $.proxy(eventHandler.handleClearQueueEvent, eventHandler));
     // - Single item is removed
-    $("body").on("click", "#queue-component li[data-vcr-url] a.removeFromVcrQueue", $.proxy(eventHandler.handleRemoveFromQueueEvent, eventHandler));
+    $("body").on("click", "#queue-component li[data-vcr-uri] a.removeFromVcrQueue", $.proxy(eventHandler.handleRemoveFromQueueEvent, eventHandler));
     // - Hide/show action
     $("body").on("click", "#queue-component .component-control-hide-toggle", $.proxy(eventHandler.handleVcrQueueMinimizedToggle, eventHandler));
     // - Help button clicked
@@ -72,13 +72,13 @@ const registerEventHandlers = function (vcrIntegration) {
     });
 
     // If auto registration of handlers enabled
-    if ($("a[data-vcr-url]").length > 0) {
-        logger.debug("Found one or more VCR queue item controls: " + $("a[data-vcr-url]").length);
+    if ($("a[data-vcr-uri]").length > 0) {
+        logger.debug("Found one or more VCR queue item controls: " + $("a[data-vcr-uri]").length);
 
         // TODO: render 'add to queue' buttons where placeholders are defined
 
         // bind event to add to queue
-        $("body").on("click", "a[data-vcr-url]", $.proxy(eventHandler.handleAddToQueueEvent, eventHandler));
+        $("body").on("click", "a[data-vcr-uri]", $.proxy(eventHandler.handleAddToQueueEvent, eventHandler));
     }
 };
 
