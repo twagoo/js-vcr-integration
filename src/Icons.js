@@ -20,6 +20,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core'
 import {faCircleChevronUp,
         faCircleChevronDown,
         faTrash,
+        faLink,
         faCircleQuestion
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -27,5 +28,6 @@ export const icons = {
     "hide": icon(faCircleChevronDown).html,
     "show": icon(faCircleChevronUp).html,
     "remove": icon(faTrash).html,
+    "itemUrlLink": icon(faLink).html,
     "help": icon(faCircleQuestion).html
 }

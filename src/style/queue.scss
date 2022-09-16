@@ -130,16 +130,32 @@ $screen-sm: 768px;
             margin-left: 1em;
         }
     }
-}
 
-ul.queue-items {
-    margin: 0 1em 1em .5em;
-    max-height: 10em;
-    overflow-y: auto;
+    h2 {
+        margin: 0 0 .5em 0;
+    }
 
-    @media (max-width: $screen-sm) {
-        //smaller screens
-        max-height: 3em;
-        margin: 0 .5em .5em 0;
+    ul.queue-items {
+        margin: 0 1em 1em .5em;
+        padding: 0 0 0 2em;
+        max-height: 10em;
+        overflow-y: auto;
+
+        @media (max-width: $screen-sm) {
+            //smaller screens
+            max-height: 3em;
+            margin: 0 .5em .5em 0;
+            padding: 0 0 0 1em;
+        }
+
+        li {
+            a.itemUrlLink {
+                color: darkgray;
+
+                &:hover {
+                    color: darken(darkgray, 30%);
+                }
+            }
+        }
     }
 }
