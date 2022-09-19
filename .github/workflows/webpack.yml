@@ -3,10 +3,10 @@ name: NodeJS with Webpack
 on:
   push:
     branches: [ "main", "develop", "actions-deploy" ]
+    tags: [ '*' ]
   pull_request:
     branches: [ "main", "develop" ]
-  tags:
-    - '*'
+
 
 jobs:
   build:
